@@ -11,17 +11,20 @@ The target API must answer by a JSON response.
 
 The parameters must be a correct JSON object with those fields, no default value will be used.
 
-- `"url" :` Should contain the full URL of the API endpoint. **Note that any call to a non-https URL will fail**
-
 - `"body" :` The raw string of the request's body.
+
+- `"dataType" :` Must contain "number" or "string" to specify the expected type of the data
+
+- `"dataset" :` The ethereum address hex string of the dataset smart contract. 
 
 - `"headers" : ` Contain a sub object composed of the http request headers key - values
 
-- `"method" :` The request's HTTP word
-
 - `"JSONPath" :` The JSON path of the data inside the request's answer. Must be a valid [JSON path](https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html)
 
-- `"dataset" :` The ethereum address hex string of the dataset smart contract. 
+- `"method" :` The request's HTTP word
+
+- `"url" :` Should contain the full URL of the API endpoint. **Note that any call to a non-https URL will fail**
+
 
 The dataset is the only optional field. Adding an unexpected field will produce an error.
 
@@ -38,4 +41,4 @@ The API key itself should be specified in the dataset
 The dataset itself should be a JSON with two fields :
 
 `"apiKey" :` the raw API key
-`"paramSetId" :` the hash of the used pararm set
+`"callParamsId" :` the hash of the used pararm set
