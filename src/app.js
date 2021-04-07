@@ -77,7 +77,7 @@ const occurrences = require('utils').occurrences;
     };
 
     let res = await fetch(paramSet.url, {
-      method: paramSet.HTTPWord,
+      method: paramSet.method,
       body: (paramSet.body === "" ? null : paramSet.body),
       headers: paramSet.headers
     });
