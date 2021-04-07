@@ -91,7 +91,7 @@ const occurrences = require('utils').occurrences;
       'callback-data': value // WIP - TODO
     };
     await fsPromises.writeFile(
-      `${iexecOut}/computed.json`,
+      `${outputRoot}/computed.json`,
       JSON.stringify(computedJsonObj),
     );
   } catch (e) {
