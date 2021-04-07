@@ -84,7 +84,7 @@ const occurrences = require('utils').occurrences;
 
     const value = jp.query(res, paramSet.JSONPath);
 
-    if (typeof value === "object") throw "The value extracted from the JSON response should be a primitve."; 
+    if (typeof value[0] === "object" || value.length !== 1) throw "The value extracted from the JSON response should be a primitve."; 
 
     // Declare everything is computed
     const computedJsonObj = {
