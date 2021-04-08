@@ -35,16 +35,18 @@ const occurrences = require('utils').occurrences;
 
     if (callId !== dataset.callId) throw Error("Computed callId does not match dataset's callId");
 
-      /* 
-    Checking if Dataset is here and replace the API key 
-    */
+    /* 
+  Checking if Dataset is here and replace the API key 
+  */
     if (isDatasetPresent) {
-        try {
-          apiKey = JSON.parse((await fsPromises.readFile(inputsRoot + datasetPath))).apiKey;
-        } catch (e) {
-          throw Error("Could not read the data set : " + e);
-        }
+      try {
+        apiKey = JSON.parse((await fsPromises.readFile(inputsRoot + datasetPath))).apiKey;
+      } catch (e) {
+        throw Error("Could not read the data set : " + e);
       }
+
+      if (paramSet.dataset !== datasetAddress) throw Error("The dataset used does not match dataset specified in the paramset");
+    }
 
     let keyCount = 0;
     keyCount += occurrences(paramSet.url, apiKeyPlaceHolder);
@@ -84,7 +86,7 @@ const occurrences = require('utils').occurrences;
 
     const value = jp.query(res, paramSet.JSONPath);
 
-    if (typeof value[0] === "object" || value.length !== 1) throw Error("The value extracted from the JSON response should be a primitve."); 
+    if (typeof value[0] === "object" || value.length !== 1) throw Error("The value extracted from the JSON response should be a primitve.");
 
     // Declare everything is computed
     const computedJsonObj = {
