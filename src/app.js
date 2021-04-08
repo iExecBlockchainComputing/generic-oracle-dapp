@@ -14,11 +14,11 @@ const occurrences = require('utils').occurrences;
 
     switch (process.env.IEXEC_NB_INPUT_FILES) {
       case 0:
-        throw "Paramset missing in input files";
+        throw Error("Paramset missing in input files");
       case 1:
         break;
       default:
-        throw "Several input files detected while expected one";
+        throw Error("Several input files detected while expected one");
     }
 
     let paramSet = JSON.parse(await fsPromises.readFile(inputsRoot + inputFilePath));
@@ -33,7 +33,7 @@ const occurrences = require('utils').occurrences;
     const oracleId = solidityKeccak256(['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
       [paramSet.JSONPath, paramSet.body, paramSet.dataType, paramSet.dataset, headersTable, paramSet.method, paramSet.url]);
 
-    if (callId !== dataset.callId) throw "Computed callId does not match dataset's callId";
+    if (callId !== dataset.callId) throw Error("Computed callId does not match dataset's callId");
 
       /* 
     Checking if Dataset is here and replace the API key 
@@ -42,7 +42,7 @@ const occurrences = require('utils').occurrences;
         try {
           apiKey = JSON.parse((await fsPromises.readFile(inputsRoot + datasetPath))).apiKey;
         } catch (e) {
-          throw "Could not read the data set : " + e;
+          throw Error("Could not read the data set : " + e);
         }
       }
 
@@ -61,19 +61,19 @@ const occurrences = require('utils').occurrences;
 
     switch (keyCount) {
       case 0:
-        if (isDatasetPresent) throw "Dataset was provided without any api key placeholder to replace"
+        if (isDatasetPresent) throw Error("Dataset was provided without any api key placeholder to replace");
         break;
       case 1:
-        if (!isDatasetPresent) throw "Api key placeholder was found but no Dataset was provided"
+        if (!isDatasetPresent) throw Error("Api key placeholder was found but no Dataset was provided");
         break;
       default:
-        throw "Several api key placeholder were found while " + isDatasetPresent ? 1 : 0 + " was expected";
+        throw Error("Several api key placeholder were found while " + isDatasetPresent ? 1 : 0 + " was expected");
     }
 
     let urlObject = new URL(paramSet.url);
 
     if (urlObject.protocol !== "https:") {
-      throw "Url must use the https protocol"
+      throw Error("Url must use the https protocol");
     };
 
     let res = await fetch(paramSet.url, {
@@ -84,7 +84,7 @@ const occurrences = require('utils').occurrences;
 
     const value = jp.query(res, paramSet.JSONPath);
 
-    if (typeof value[0] === "object" || value.length !== 1) throw "The value extracted from the JSON response should be a primitve."; 
+    if (typeof value[0] === "object" || value.length !== 1) throw Error("The value extracted from the JSON response should be a primitve."); 
 
     // Declare everything is computed
     const computedJsonObj = {
