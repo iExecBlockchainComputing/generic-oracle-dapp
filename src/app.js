@@ -2,7 +2,7 @@ const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
 const solidityKeccak256 = require('@ethersproject/solidity').keccak256;
 const jp = require('jsonpath');
-const occurrences = require('utils').occurrences;
+const utils = require('utils');
 
 
 (async () => {
@@ -26,7 +26,7 @@ const occurrences = require('utils').occurrences;
     let apiKey;
     const datasetAddress = "0x0000000000000000000000000000000000000001";
     const datasetPath = "dataset.json";
-    const headersTable = Object.entries(paramSet.headers);
+    const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
     const isDatasetPresent = datasetAddress !== "0x0000000000000000000000000000000000000000";
     const callId = solidityKeccak256(['string', 'string[][]', 'string', 'string'],
       [paramSet.body, headersTable, paramSet.method, paramSet.url])
@@ -49,12 +49,12 @@ const occurrences = require('utils').occurrences;
     }
 
     let keyCount = 0;
-    keyCount += occurrences(paramSet.url, apiKeyPlaceHolder);
+    keyCount += utils.occurrences(paramSet.url, apiKeyPlaceHolder);
     if (isDatasetPresent) paramSet.url = paramSet.url.replace(apiKeyPlaceHolder, apiKey);
 
     for (let [key, value] of headersTable) {
       if (typeof value === "string") {
-        keyCount += occurrences(value, apiKeyPlaceHolder);
+        keyCount += utils.occurrences(value, apiKeyPlaceHolder);
         if (isDatasetPresent && keyCount == 1) {
           paramSet.headers[key] = value.replace(apiKeyPlaceHolder, apiKey);
         }
