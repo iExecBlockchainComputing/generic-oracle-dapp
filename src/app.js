@@ -2,60 +2,76 @@ const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
 const solidityKeccak256 = require('@ethersproject/solidity').keccak256;
 const jp = require('jsonpath');
-const utils = require('utils');
-
+const utils = require('./utils');
 
 (async () => {
   try {
-
     const inputsRoot = process.env.IEXEC_INPUT_FILES_FOLDER;
     const inputFilePath = process.env.IEXEC_INPUT_FILE_NAME_0;
     const outputRoot = process.env.IEXEC_OUT;
 
     switch (process.env.IEXEC_NB_INPUT_FILES) {
       case 0:
-        throw Error("Paramset missing in input files");
+        throw Error('Paramset missing in input files');
       case 1:
         break;
       default:
-        throw Error("Several input files detected while expected one");
+        throw Error('Several input files detected while expected one');
     }
 
-    let paramSet = JSON.parse(await fsPromises.readFile(inputsRoot + inputFilePath));
-    const apiKeyPlaceHolder = "%API_KEY%";
+    const paramSet = JSON.parse(await fsPromises.readFile(inputsRoot + inputFilePath));
+    const apiKeyPlaceHolder = '%API_KEY%';
     let apiKey;
-    const datasetAddress = "0x0000000000000000000000000000000000000001";
-    const datasetPath = "dataset.json";
+    const datasetAddress = '0x0000000000000000000000000000000000000001';
+    const datasetPath = 'dataset.json';
     const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
-    const isDatasetPresent = datasetAddress !== "0x0000000000000000000000000000000000000000";
-    const callId = solidityKeccak256(['string', 'string[][]', 'string', 'string'],
-      [paramSet.body, headersTable, paramSet.method, paramSet.url])
-    const oracleId = solidityKeccak256(['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
-      [paramSet.JSONPath, paramSet.body, paramSet.dataType, paramSet.dataset, headersTable, paramSet.method, paramSet.url]);
+    const isDatasetPresent = datasetAddress !== '0x0000000000000000000000000000000000000000';
+    const callId = solidityKeccak256(
+      ['string', 'string[][]', 'string', 'string'],
+      [
+        paramSet.body,
+        headersTable,
+        paramSet.method,
+        paramSet.url,
+      ],
+    );
+    const oracleId = solidityKeccak256(
+      ['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
+      [
+        paramSet.JSONPath,
+        paramSet.body,
+        paramSet.dataType,
+        paramSet.dataset,
+        headersTable,
+        paramSet.method,
+        paramSet.url,
+      ],
+    );
+    const urlObject = new URL(paramSet.url);
+    if (callId !== dataset.callId) throw Error('Computed callId does not match dataset\'s callId');
 
-    if (callId !== dataset.callId) throw Error("Computed callId does not match dataset's callId");
-
-    /* 
-  Checking if Dataset is here and replace the API key 
+    /*
+  Checking if Dataset is here and replace the API key
   */
     if (isDatasetPresent) {
       try {
         apiKey = JSON.parse((await fsPromises.readFile(inputsRoot + datasetPath))).apiKey;
       } catch (e) {
-        throw Error("Could not read the data set : " + e);
+        throw Error(`Could not read the data set : ${e}`);
       }
 
-      if (paramSet.dataset !== datasetAddress) throw Error("The dataset used does not match dataset specified in the paramset");
+      if (paramSet.dataset !== datasetAddress) throw Error('The dataset used does not match dataset specified in the paramset');
     }
 
     let keyCount = 0;
     keyCount += utils.occurrences(paramSet.url, apiKeyPlaceHolder);
     if (isDatasetPresent) paramSet.url = paramSet.url.replace(apiKeyPlaceHolder, apiKey);
 
-    for (let [key, value] of headersTable) {
-      if (typeof value === "string") {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of headersTable) {
+      if (typeof value === 'string') {
         keyCount += utils.occurrences(value, apiKeyPlaceHolder);
-        if (isDatasetPresent && keyCount == 1) {
+        if (isDatasetPresent && keyCount === 1) {
           paramSet.headers[key] = value.replace(apiKeyPlaceHolder, apiKey);
         }
       }
@@ -63,34 +79,32 @@ const utils = require('utils');
 
     switch (keyCount) {
       case 0:
-        if (isDatasetPresent) throw Error("Dataset was provided without any api key placeholder to replace");
+        if (isDatasetPresent) throw Error('Dataset was provided without any api key placeholder to replace');
         break;
       case 1:
-        if (!isDatasetPresent) throw Error("Api key placeholder was found but no Dataset was provided");
+        if (!isDatasetPresent) throw Error('Api key placeholder was found but no Dataset was provided');
         break;
       default:
-        throw Error("Several api key placeholder were found while " + isDatasetPresent ? 1 : 0 + " was expected");
+        throw Error(`Several api key placeholder were found while ${isDatasetPresent ? 1 : 0} was expected`);
     }
 
-    let urlObject = new URL(paramSet.url);
+    if (urlObject.protocol !== 'https:') {
+      throw Error('Url must use the https protocol');
+    }
 
-    if (urlObject.protocol !== "https:") {
-      throw Error("Url must use the https protocol");
-    };
-
-    let res = await fetch(paramSet.url, {
+    const res = await fetch(paramSet.url, {
       method: paramSet.method,
-      body: (paramSet.body === "" ? null : paramSet.body),
-      headers: paramSet.headers
+      body: (paramSet.body === '' ? null : paramSet.body),
+      headers: paramSet.headers,
     });
 
     const value = jp.query(res, paramSet.JSONPath);
 
-    if (typeof value[0] === "object" || value.length !== 1) throw Error("The value extracted from the JSON response should be a primitve.");
+    if (typeof value[0] === 'object' || value.length !== 1) throw Error('The value extracted from the JSON response should be a primitve.');
 
     // Declare everything is computed
     const computedJsonObj = {
-      'callback-data': value // WIP - TODO
+      'callback-data': value, // WIP - TODO
     };
     await fsPromises.writeFile(
       `${outputRoot}/computed.json`,

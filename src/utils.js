@@ -1,12 +1,14 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
+/* eslint-disable indent */
 module.exports = {
-
-    occurrences: function (string, subString, allowOverlapping = true) {
-        string += "";
-        subString += "";
+    occurrences(string, subString, allowOverlapping = true) {
+        string += '';
+        subString += '';
         if (subString.length <= 0) return (string.length + 1);
-        var n = 0,
-            pos = 0,
-            step = allowOverlapping ? 1 : subString.length;
+        let n = 0;
+        let pos = 0;
+        const step = allowOverlapping ? 1 : subString.length;
         while (true) {
             pos = string.indexOf(subString, pos);
             if (pos >= 0) {
@@ -20,10 +22,10 @@ module.exports = {
         .sort()
         .reduce((acc, curr) => {
             if (typeof obj[curr] === 'object') {
-                acc[curr] = sortObjKeys(obj[curr]);
+                acc[curr] = this.sortObjKeys(obj[curr]);
             } else {
                 acc[curr] = obj[curr];
             }
             return acc;
-        }, {})
-}
+        }, {}),
+};
