@@ -1,6 +1,6 @@
 const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
-const solidityKeccak256 = require('@ethersproject/solidity').keccak256;
+const ethers = require('ethers');
 const jp = require('jsonpath');
 const utils = require('./utils');
 
@@ -24,9 +24,10 @@ const utils = require('./utils');
     let apiKey;
     const datasetAddress = '0x0000000000000000000000000000000000000001';
     const datasetPath = 'dataset.json';
+    const dataset = JSON.parse(await fsPromises.readFile(inputsRoot + datasetPath));
     const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
     const isDatasetPresent = datasetAddress !== '0x0000000000000000000000000000000000000000';
-    const callId = solidityKeccak256(
+    const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
       [
         paramSet.body,
@@ -35,7 +36,7 @@ const utils = require('./utils');
         paramSet.url,
       ],
     );
-    const oracleId = solidityKeccak256(
+    const oracleId = ethers.utils.solidityKeccak256(
       ['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
       [
         paramSet.JSONPath,
@@ -99,12 +100,33 @@ const utils = require('./utils');
     });
 
     const value = jp.query(res, paramSet.JSONPath);
+    const abiCoder = ethers.utils.defaultAbiCoder;
+    let result;
 
-    if (typeof value[0] === 'object' || value.length !== 1) throw Error('The value extracted from the JSON response should be a primitve.');
+    if (typeof value[0] === 'object' || value.length !== 1) {
+      throw Error('The value extracted from the JSON response should be a primitve.');
+    }
+
+    switch (paramSet.dataType) {
+      case 'number':
+        if (typeof value !== 'number') throw Error(`Expected a number value, got a ${typeof value}`);
+        result = abiCoder.encode(['bytes32', 'int256'], [oracleId, value]);
+        break;
+      case 'string':
+        if (typeof value !== 'string') throw Error(`Expected a string value, got a ${typeof value}`);
+        result = abiCoder.encode(['bytes32', 'string'], [oracleId, value]);
+        break;
+      case 'boolean':
+        if (typeof value !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof value}`);
+        result = abiCoder.encode(['bytes32', 'bool'], [oracleId, value]);
+        break;
+      default:
+        throw Error(`Expected a data type in this list : number, string, bool. Got ${paramSet.dataType}`);
+    }
 
     // Declare everything is computed
     const computedJsonObj = {
-      'callback-data': value, // WIP - TODO
+      'callback-data': result, // WIP - TODO
     };
     await fsPromises.writeFile(
       `${outputRoot}/computed.json`,

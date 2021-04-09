@@ -4,6 +4,7 @@
   "description": "This application is meant to build a docker container usable in SGX iexec tasks. The dapp take an input file containing a param set in a JSON format. The param set describe the request that should be done to the target API in order to get the wanted data.",
   "main": "index.js",
   "dependencies": {
+    "ethers": "^5.1.0",
     "figlet": "^1.5.0",
     "jsonpath": "^1.1.0",
     "node-fetch": "^2.6.1"
