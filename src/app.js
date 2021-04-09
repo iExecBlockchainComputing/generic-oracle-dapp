@@ -9,6 +9,7 @@ const utils = require('./utils');
     const inputsRoot = process.env.IEXEC_INPUT_FILES_FOLDER;
     const inputFilePath = process.env.IEXEC_INPUT_FILE_NAME_0;
     const outputRoot = process.env.IEXEC_OUT;
+    const datasetPath = `${inputsRoot}/${process.env.IEXEC_DATASET_FILENAME}`;
 
     switch (process.env.IEXEC_NB_INPUT_FILES) {
       case 0:
@@ -23,7 +24,6 @@ const utils = require('./utils');
     const apiKeyPlaceHolder = '%API_KEY%';
     let apiKey;
     const datasetAddress = '0x0000000000000000000000000000000000000001';
-    const datasetPath = 'dataset.json';
     const dataset = JSON.parse(await fsPromises.readFile(inputsRoot + datasetPath));
     const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
     const isDatasetPresent = datasetAddress !== '0x0000000000000000000000000000000000000000';
