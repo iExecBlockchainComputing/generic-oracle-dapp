@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
-const ethers = require('ethers');
+const { solidityKeccak256, defaultAbiCoder } = require('ethers');
 const jp = require('jsonpath');
 const utils = require('./utils');
 
@@ -13,9 +13,9 @@ const utils = require('./utils');
     const datasetPath = `${process.env.IEXEC_IN}/${process.env.IEXEC_DATASET_FILENAME}`;
 
     switch (process.env.IEXEC_NB_INPUT_FILES) {
-      case 0:
+      case '0':
         throw Error('Paramset missing in input files');
-      case 1:
+      case '1':
         break;
       default:
         throw Error('Several input files detected while expected one');
@@ -25,7 +25,7 @@ const utils = require('./utils');
     let apiKey = '';
     const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
     const isDatasetPresent = (typeof datasetPath === 'string' && datasetPath.length > 0);
-    const callId = ethers.utils.solidityKeccak256(
+    const callId = solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
       [
         paramSet.body,
@@ -34,7 +34,7 @@ const utils = require('./utils');
         paramSet.url,
       ],
     );
-    const oracleId = ethers.utils.solidityKeccak256(
+    const oracleId = solidityKeccak256(
       ['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
       [
         paramSet.JSONPath,
@@ -52,6 +52,9 @@ const utils = require('./utils');
   Checking if Dataset is here and replace the API key
   */
     if (isDatasetPresent) {
+      if (paramSet.dataset === '0x0000000000000000000000000000000000000000') {
+        throw Error('Dataset file was provided while no dataset was specified in paramSet');
+      }
       try {
         const dataset = JSON.parse(await fsPromises.readFile(datasetPath));
         apiKey = dataset.apiKey;
@@ -62,9 +65,6 @@ const utils = require('./utils');
 
       // eslint-disable-next-line max-len
       // if (paramSet.dataset !== datasetAddress) throw Error('The dataset used does not match dataset specified in the paramset');
-      if (paramSet.dataset === '0x0000000000000000000000000000000000000000') {
-        throw Error('Dataset file was provided while no dataset was specified in paramSet');
-      }
     }
 
     let keyCount = 0;
@@ -104,7 +104,6 @@ const utils = require('./utils');
     });
 
     const value = jp.query(res, paramSet.JSONPath);
-    const abiCoder = ethers.utils.defaultAbiCoder;
     let result;
 
     if (typeof value[0] === 'object' || value.length !== 1) {
@@ -114,15 +113,15 @@ const utils = require('./utils');
     switch (paramSet.dataType) {
       case 'number':
         if (typeof value[0] !== 'number') throw Error(`Expected a number value, got a ${typeof value}`);
-        result = abiCoder.encode(['bytes32', 'int256'], [oracleId, value]);
+        result = defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, value]);
         break;
       case 'string':
         if (typeof value[0] !== 'string') throw Error(`Expected a string value, got a ${typeof value}`);
-        result = abiCoder.encode(['bytes32', 'string'], [oracleId, value]);
+        result = defaultAbiCoder.encode(['bytes32', 'string'], [oracleId, value]);
         break;
       case 'boolean':
         if (typeof value[0] !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof value}`);
-        result = abiCoder.encode(['bytes32', 'bool'], [oracleId, value]);
+        result = defaultAbiCoder.encode(['bytes32', 'bool'], [oracleId, value]);
         break;
       default:
         throw Error(`Expected a data type in this list : number, string, boolean. Got ${paramSet.dataType}`);
