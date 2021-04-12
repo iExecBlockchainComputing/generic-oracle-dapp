@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
-const { solidityKeccak256, defaultAbiCoder } = require('ethers');
+const { solidityKeccak256, defaultAbiCoder } = require('ethers').utils;
 const jp = require('jsonpath');
 const utils = require('./utils');
 
