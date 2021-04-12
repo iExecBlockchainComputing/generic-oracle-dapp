@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
 const ethers = require('ethers');
@@ -7,10 +8,9 @@ const utils = require('./utils');
 (async () => {
   try {
     const apiKeyPlaceHolder = '%API_KEY%';
-    const inputsRoot = process.env.IEXEC_INPUT_FILES_FOLDER;
-    const inputFilePath = process.env.IEXEC_INPUT_FILE_NAME_0;
+    const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_0}`;
     const outputRoot = process.env.IEXEC_OUT;
-    const datasetPath = `${inputsRoot}/${process.env.IEXEC_DATASET_FILENAME}`;
+    const datasetPath = `${process.env.IEXEC_IN}/${process.env.IEXEC_DATASET_FILENAME}`;
 
     switch (process.env.IEXEC_NB_INPUT_FILES) {
       case 0:
@@ -21,7 +21,7 @@ const utils = require('./utils');
         throw Error('Several input files detected while expected one');
     }
 
-    const paramSet = JSON.parse(await fsPromises.readFile(inputsRoot + inputFilePath));
+    const paramSet = JSON.parse(await fsPromises.readFile(inputFilePath));
     let apiKey = '';
     const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
     const isDatasetPresent = (typeof datasetPath === 'string' && datasetPath.length > 0);
@@ -53,7 +53,7 @@ const utils = require('./utils');
   */
     if (isDatasetPresent) {
       try {
-        const dataset = JSON.parse(await fsPromises.readFile(inputsRoot + datasetPath));
+        const dataset = JSON.parse(await fsPromises.readFile(datasetPath));
         apiKey = dataset.apiKey;
         if (callId !== dataset.callId) throw Error('Computed callId does not match dataset\'s callId');
       } catch (e) {
@@ -130,7 +130,7 @@ const utils = require('./utils');
 
     // Declare everything is computed
     const computedJsonObj = {
-      'callback-data': result, // WIP - TODO
+      'callback-data': result,
     };
     await fsPromises.writeFile(
       `${outputRoot}/computed.json`,
