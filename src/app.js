@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
-const { solidityKeccak256, defaultAbiCoder } = require('ethers').utils;
+const ethers = require('ethers');
 const jp = require('jsonpath');
 const utils = require('./utils');
 
@@ -25,7 +25,7 @@ const utils = require('./utils');
     let apiKey = '';
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
     const isDatasetPresent = (typeof datasetPath === 'string' && datasetPath.length > 0);
-    const callId = solidityKeccak256(
+    const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
       [
         paramSet.body,
@@ -34,7 +34,7 @@ const utils = require('./utils');
         paramSet.url,
       ],
     );
-    const oracleId = solidityKeccak256(
+    const oracleId = ethers.utils.solidityKeccak256(
       ['string', 'string', 'string', 'address', 'string[][]', 'string', 'string'],
       [
         paramSet.JSONPath,
@@ -58,7 +58,10 @@ const utils = require('./utils');
       try {
         const dataset = JSON.parse(await fsPromises.readFile(datasetPath));
         apiKey = dataset.apiKey;
-        if (callId !== dataset.callId) throw Error('Computed callId does not match dataset\'s callId');
+        if (callId !== dataset.callId) {
+          throw Error('Computed callId does not match dataset\'s callId \n'
+            + `Computed ${callId} but found ${dataset.callId} in the dataset`);
+        }
       } catch (e) {
         throw Error(`Could not read the dataset :\n${e}`);
       }
@@ -97,31 +100,37 @@ const utils = require('./utils');
       throw Error('Url must use the https protocol');
     }
 
-    const res = await fetch(replacedUrl, {
+    const res = await (await fetch(replacedUrl, {
       method: paramSet.method,
       body: (paramSet.body === '' ? null : paramSet.body),
       headers: paramSet.headers,
-    });
+    })).json();
 
     const value = jp.query(res, paramSet.JSONPath);
-    let result;
 
     if (typeof value[0] === 'object' || value.length !== 1) {
       throw Error('The value extracted from the JSON response should be a primitve.');
     }
 
+    const extractedValue = value[0];
+
+    let result;
+    let finalNumber;
+    const power18 = ethers.BigNumber.from(10).pow(18);
+
     switch (paramSet.dataType) {
       case 'number':
-        if (typeof value[0] !== 'number') throw Error(`Expected a number value, got a ${typeof value}`);
-        result = defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, value]);
+        if (typeof extractedValue !== 'number') throw Error(`Expected a number value, got a ${typeof extractedValue}`);
+        finalNumber = ethers.BigNumber.from(extractedValue).mul(power18);
+        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, finalNumber]);
         break;
       case 'string':
-        if (typeof value[0] !== 'string') throw Error(`Expected a string value, got a ${typeof value}`);
-        result = defaultAbiCoder.encode(['bytes32', 'string'], [oracleId, value]);
+        if (typeof extractedValue !== 'string') throw Error(`Expected a string value, got a ${typeof extractedValue}`);
+        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'string'], [oracleId, extractedValue]);
         break;
       case 'boolean':
-        if (typeof value[0] !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof value}`);
-        result = defaultAbiCoder.encode(['bytes32', 'bool'], [oracleId, value]);
+        if (typeof extractedValue !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof extractedValue}`);
+        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'bool'], [oracleId, extractedValue]);
         break;
       default:
         throw Error(`Expected a data type in this list : number, string, boolean. Got ${paramSet.dataType}`);
