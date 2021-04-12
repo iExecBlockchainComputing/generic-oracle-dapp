@@ -1,6 +1,18 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 /* eslint-disable indent */
+
+const sortObjKeys = (obj) => Object.keys(obj)
+.sort()
+.reduce((acc, curr) => {
+    if (typeof obj[curr] === 'object') {
+        acc[curr] = sortObjKeys(obj[curr]);
+    } else {
+        acc[curr] = obj[curr];
+    }
+    return acc;
+}, {});
+
 module.exports = {
     occurrences(string, subString, allowOverlapping = true) {
         string += '';
@@ -18,14 +30,5 @@ module.exports = {
         }
         return n;
     },
-    sortObjKeys: (obj) => Object.keys(obj)
-        .sort()
-        .reduce((acc, curr) => {
-            if (typeof obj[curr] === 'object') {
-                acc[curr] = this.sortObjKeys(obj[curr]);
-            } else {
-                acc[curr] = obj[curr];
-            }
-            return acc;
-        }, {}),
+    sortObjKeys,
 };
