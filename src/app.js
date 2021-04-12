@@ -23,7 +23,7 @@ const utils = require('./utils');
 
     const paramSet = JSON.parse(await fsPromises.readFile(inputFilePath));
     let apiKey = '';
-    const headersTable = utils.sortObjKeys(Object.entries(paramSet.headers));
+    const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
     const isDatasetPresent = (typeof datasetPath === 'string' && datasetPath.length > 0);
     const callId = solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
