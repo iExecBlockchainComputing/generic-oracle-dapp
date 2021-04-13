@@ -12,13 +12,14 @@ console.log('App starting');
     console.log('App started');
 
     console.log(`IEXEC_INPUT_FILES_FOLDER : ${process.env.IEXEC_INPUT_FILES_FOLDER}`);
-    console.log(`IEXEC_INPUT_FILE_NAME_0 : ${process.env.IEXEC_INPUT_FILE_NAME_0}`);
+    console.log(`IEXEC_INPUT_FILE_NAME_0 : ${process.env.IEXEC_INPUT_FILE_NAME_1}`);
     console.log(`IEXEC_OUT : ${process.env.IEXEC_OUT}`);
     console.log(`IEXEC_IN : ${process.env.IEXEC_IN}`);
     console.log(`IEXEC_DATASET_FILENAME : ${process.env.IEXEC_DATASET_FILENAME}`);
+    console.log(`IEXEC_NB_INPUT_FILES : ${process.env.IEXEC_NB_INPUT_FILES}`);
 
     const apiKeyPlaceHolder = '%API_KEY%';
-    const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_0}`;
+    const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_1}`;
     const outputRoot = process.env.IEXEC_OUT;
     const datasetPath = `${process.env.IEXEC_IN}/${process.env.IEXEC_DATASET_FILENAME}`;
 
