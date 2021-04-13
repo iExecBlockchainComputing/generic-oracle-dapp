@@ -3,6 +3,7 @@ const fsPromises = require('fs').promises;
 const fetch = require('node-fetch');
 const ethers = require('ethers');
 const jp = require('jsonpath');
+const Big = require('big.js');
 const utils = require('./utils');
 
 (async () => {
@@ -24,7 +25,7 @@ const utils = require('./utils');
     const paramSet = JSON.parse(await fsPromises.readFile(inputFilePath));
     let apiKey = '';
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
-    const isDatasetPresent = (typeof datasetPath === 'string' && datasetPath.length > 0);
+    const isDatasetPresent = (typeof process.env.IEXEC_DATASET_FILENAME === 'string' && process.env.IEXEC_DATASET_FILENAME.length > 0);
     const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
       [
@@ -46,6 +47,7 @@ const utils = require('./utils');
         paramSet.url,
       ],
     );
+
     const urlObject = new URL(paramSet.url);
 
     /*
@@ -72,7 +74,7 @@ const utils = require('./utils');
 
     let keyCount = 0;
     keyCount += utils.occurrences(paramSet.url, apiKeyPlaceHolder);
-    let replacedUrl;
+    let replacedUrl = paramSet.url;
     if (isDatasetPresent) replacedUrl = paramSet.url.replace(apiKeyPlaceHolder, apiKey);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -116,12 +118,11 @@ const utils = require('./utils');
 
     let result;
     let finalNumber;
-    const power18 = ethers.BigNumber.from(10).pow(18);
 
     switch (paramSet.dataType) {
       case 'number':
         if (typeof extractedValue !== 'number') throw Error(`Expected a number value, got a ${typeof extractedValue}`);
-        finalNumber = ethers.BigNumber.from(extractedValue).mul(power18);
+        finalNumber = ethers.BigNumber.from((new Big(extractedValue).times(new Big('1e18'))).toString());
         result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, finalNumber]);
         break;
       case 'string':

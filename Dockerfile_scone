@@ -5,6 +5,8 @@ RUN apk add bash nodejs-npm
 RUN SCONE_MODE=sim npm install node-fetch@2.6.x
 RUN SCONE_MODE=sim npm install ethers@5.1.0
 RUN SCONE_MODE=sim npm install jsonpath@1.1.x
+RUN SCONE_MODE=sim npm install big.js@6.0.x
+
 
 COPY ./src /app
 
