@@ -6,8 +6,17 @@ const jp = require('jsonpath');
 const Big = require('big.js');
 const utils = require('./utils');
 
+console.log('App starting');
 (async () => {
   try {
+    console.log('App started');
+
+    console.log(`IEXEC_INPUT_FILES_FOLDER : ${process.env.IEXEC_INPUT_FILES_FOLDER}`);
+    console.log(`IEXEC_INPUT_FILE_NAME_0 : ${process.env.IEXEC_INPUT_FILE_NAME_0}`);
+    console.log(`IEXEC_OUT : ${process.env.IEXEC_OUT}`);
+    console.log(`IEXEC_IN : ${process.env.IEXEC_IN}`);
+    console.log(`IEXEC_DATASET_FILENAME : ${process.env.IEXEC_DATASET_FILENAME}`);
+
     const apiKeyPlaceHolder = '%API_KEY%';
     const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_0}`;
     const outputRoot = process.env.IEXEC_OUT;
@@ -23,9 +32,15 @@ const utils = require('./utils');
     }
 
     const paramSet = JSON.parse(await fsPromises.readFile(inputFilePath));
+
+    console.log(paramSet);
+
     let apiKey = '';
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
     const isDatasetPresent = (typeof process.env.IEXEC_DATASET_FILENAME === 'string' && process.env.IEXEC_DATASET_FILENAME.length > 0);
+
+    console.log(`isDatasetPresent : ${isDatasetPresent}`);
+
     const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
       [
@@ -47,6 +62,9 @@ const utils = require('./utils');
         paramSet.url,
       ],
     );
+
+    console.log(`callId : ${callId}`);
+    console.log(`oracleId : ${oracleId}`);
 
     const urlObject = new URL(paramSet.url);
 
@@ -108,6 +126,8 @@ const utils = require('./utils');
       headers: paramSet.headers,
     })).json();
 
+    console.log(`res : ${res}`);
+
     const value = jp.query(res, paramSet.JSONPath);
 
     if (typeof value[0] === 'object' || value.length !== 1) {
@@ -115,6 +135,8 @@ const utils = require('./utils');
     }
 
     const extractedValue = value[0];
+
+    console.log(`extractedValue : ${extractedValue}`);
 
     let result;
     let finalNumber;
@@ -138,6 +160,7 @@ const utils = require('./utils');
     }
 
     // Declare everything is computed
+    console.log('Everything computed well, writing to computed.json');
     const computedJsonObj = {
       'callback-data': result,
     };
