@@ -146,15 +146,15 @@ console.log('App starting');
       case 'number':
         if (typeof extractedValue !== 'number') throw Error(`Expected a number value, got a ${typeof extractedValue}`);
         finalNumber = ethers.BigNumber.from((new Big(extractedValue).times(new Big('1e18'))).toFixed());
-        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, finalNumber]);
+        result = ethers.utils.defaultAbiCoder.encode(['int256'], [finalNumber]);
         break;
       case 'string':
         if (typeof extractedValue !== 'string') throw Error(`Expected a string value, got a ${typeof extractedValue}`);
-        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'string'], [oracleId, extractedValue]);
+        result = ethers.utils.defaultAbiCoder.encode(['string'], [extractedValue]);
         break;
       case 'boolean':
         if (typeof extractedValue !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof extractedValue}`);
-        result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'bool'], [oracleId, extractedValue]);
+        result = ethers.utils.defaultAbiCoder.encode(['bool'], [extractedValue]);
         break;
       default:
         throw Error(`Expected a data type in this list : number, string, boolean. Got ${paramSet.dataType}`);
@@ -163,7 +163,7 @@ console.log('App starting');
     // Declare everything is computed
     console.log('Everything computed well, writing to computed.json');
     const computedJsonObj = {
-      'callback-data': result,
+      'callback-data': ethers.utils.defaultAbiCoder.encode(['bytes32', 'bytes'], [oracleId, result]),
     };
     await fsPromises.writeFile(
       `${outputRoot}/computed.json`,
