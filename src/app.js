@@ -122,7 +122,7 @@ const utils = require('./utils');
     switch (paramSet.dataType) {
       case 'number':
         if (typeof extractedValue !== 'number') throw Error(`Expected a number value, got a ${typeof extractedValue}`);
-        finalNumber = ethers.BigNumber.from((new Big(extractedValue).times(new Big('1e18'))).toString());
+        finalNumber = ethers.BigNumber.from((new Big(extractedValue).times(new Big('1e18'))).toFixed());
         result = ethers.utils.defaultAbiCoder.encode(['bytes32', 'int256'], [oracleId, finalNumber]);
         break;
       case 'string':
