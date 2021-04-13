@@ -12,7 +12,7 @@ console.log('App starting');
     console.log('App started');
 
     console.log(`IEXEC_INPUT_FILES_FOLDER : ${process.env.IEXEC_INPUT_FILES_FOLDER}`);
-    console.log(`IEXEC_INPUT_FILE_NAME_0 : ${process.env.IEXEC_INPUT_FILE_NAME_1}`);
+    console.log(`IEXEC_INPUT_FILE_NAME_1 : ${process.env.IEXEC_INPUT_FILE_NAME_1}`);
     console.log(`IEXEC_OUT : ${process.env.IEXEC_OUT}`);
     console.log(`IEXEC_IN : ${process.env.IEXEC_IN}`);
     console.log(`IEXEC_DATASET_FILENAME : ${process.env.IEXEC_DATASET_FILENAME}`);
