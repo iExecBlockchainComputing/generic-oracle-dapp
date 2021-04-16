@@ -1,4 +1,4 @@
-FROM sconecuratedimages/public-apps:node-10-alpine-scone3.0
+FROM sconecuratedimages/iexecsgx:cli
 
 ### install dependencies you need
 RUN apk add bash nodejs-npm
