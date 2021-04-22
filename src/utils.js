@@ -21,6 +21,7 @@ module.exports = {
         let n = 0;
         let pos = 0;
         const step = allowOverlapping ? 1 : subString.length;
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             pos = string.indexOf(subString, pos);
             if (pos >= 0) {

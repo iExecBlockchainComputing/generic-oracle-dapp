@@ -1,24 +1,13 @@
 /* eslint-disable no-console */
 const fsPromises = require('fs').promises;
-const fetch = require('node-fetch');
 const ethers = require('ethers');
-const jp = require('jsonpath');
 const Big = require('big.js');
 const utils = require('./utils');
+const { apiCall } = require('./caller');
+const { apiKeyPlaceHolder } = require('./conf');
 
-console.log('App starting');
 (async () => {
   try {
-    console.log('App started');
-
-    console.log(`IEXEC_INPUT_FILES_FOLDER : ${process.env.IEXEC_INPUT_FILES_FOLDER}`);
-    console.log(`IEXEC_INPUT_FILE_NAME_1 : ${process.env.IEXEC_INPUT_FILE_NAME_1}`);
-    console.log(`IEXEC_OUT : ${process.env.IEXEC_OUT}`);
-    console.log(`IEXEC_IN : ${process.env.IEXEC_IN}`);
-    console.log(`IEXEC_DATASET_FILENAME : ${process.env.IEXEC_DATASET_FILENAME}`);
-    console.log(`IEXEC_NB_INPUT_FILES : ${process.env.IEXEC_NB_INPUT_FILES}`);
-
-    const apiKeyPlaceHolder = '%API_KEY%';
     const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_1}`;
     const outputRoot = process.env.IEXEC_OUT;
     const datasetPath = `${process.env.IEXEC_IN}/${process.env.IEXEC_DATASET_FILENAME}`;
@@ -39,8 +28,6 @@ console.log('App starting');
     let apiKey = '';
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
     const isDatasetPresent = (typeof process.env.IEXEC_DATASET_FILENAME === 'string' && process.env.IEXEC_DATASET_FILENAME.length > 0);
-
-    console.log(`isDatasetPresent : ${isDatasetPresent}`);
 
     const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
@@ -67,8 +54,6 @@ console.log('App starting');
     console.log(`callId : ${callId}`);
     console.log(`oracleId : ${oracleId}`);
 
-    const urlObject = new URL(paramSet.url);
-
     /*
   Checking if Dataset is here and replace the API key
   */
@@ -93,18 +78,6 @@ console.log('App starting');
 
     let keyCount = 0;
     keyCount += utils.occurrences(paramSet.url, apiKeyPlaceHolder);
-    let replacedUrl = paramSet.url;
-    if (isDatasetPresent) replacedUrl = paramSet.url.replace(apiKeyPlaceHolder, apiKey);
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of headersTable) {
-      if (typeof value === 'string') {
-        keyCount += utils.occurrences(value, apiKeyPlaceHolder);
-        if (isDatasetPresent && keyCount === 1) {
-          paramSet.headers[key] = value.replace(apiKeyPlaceHolder, apiKey);
-        }
-      }
-    }
 
     switch (keyCount) {
       case 0:
@@ -117,27 +90,15 @@ console.log('App starting');
         throw Error(`Several api key placeholder were found while ${isDatasetPresent ? 1 : 0} was expected`);
     }
 
-    if (urlObject.protocol !== 'https:') {
-      throw Error('Url must use the https protocol');
-    }
-
-    const res = await (await fetch(replacedUrl, {
+    const extractedValue = apiCall({
+      url: paramSet.url,
       method: paramSet.method,
-      body: (paramSet.body === '' ? null : paramSet.body),
       headers: paramSet.headers,
-    })).json();
-
-    console.log(`res : ${res}`);
-
-    const value = jp.query(res, paramSet.JSONPath);
-
-    if (typeof value[0] === 'object' || value.length !== 1) {
-      throw Error('The value extracted from the JSON response should be a primitve.');
-    }
-
-    const extractedValue = value[0];
-
-    console.log(`extractedValue : ${extractedValue}`);
+      body: paramSet.body,
+      apiKey,
+      JSONPath: paramSet.JSONPath,
+      dataType: paramSet.dataType,
+    });
 
     let result;
     let finalNumber;
