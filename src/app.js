@@ -4,30 +4,24 @@ const ethers = require('ethers');
 const Big = require('big.js');
 const utils = require('./utils');
 const { apiCall } = require('./caller');
-const { apiKeyPlaceHolder } = require('./conf');
+const { jsonParamSetSchema } = require('./validators');
+const { nbFileChecker } = require('./requestConsistency');
 
 (async () => {
   try {
     const inputFilePath = `${process.env.IEXEC_INPUT_FILES_FOLDER}/${process.env.IEXEC_INPUT_FILE_NAME_1}`;
     const outputRoot = process.env.IEXEC_OUT;
     const datasetPath = `${process.env.IEXEC_IN}/${process.env.IEXEC_DATASET_FILENAME}`;
+    const isDatasetPresent = (typeof process.env.IEXEC_DATASET_FILENAME === 'string' && process.env.IEXEC_DATASET_FILENAME.length > 0);
 
-    switch (process.env.IEXEC_NB_INPUT_FILES) {
-      case '0':
-        throw Error('Paramset missing in input files');
-      case '1':
-        break;
-      default:
-        throw Error('Several input files detected while expected one');
-    }
+    nbFileChecker(process.env.IEXEC_NB_INPUT_FILES);
 
-    const paramSet = JSON.parse(await fsPromises.readFile(inputFilePath));
-
-    console.log(paramSet);
+    const validatedInputJSON = await jsonParamSetSchema()
+      .validate(await fsPromises.readFile(inputFilePath));
+    const paramSet = JSON.parse(validatedInputJSON);
 
     let apiKey = '';
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
-    const isDatasetPresent = (typeof process.env.IEXEC_DATASET_FILENAME === 'string' && process.env.IEXEC_DATASET_FILENAME.length > 0);
 
     const callId = ethers.utils.solidityKeccak256(
       ['string', 'string[][]', 'string', 'string'],
@@ -51,9 +45,6 @@ const { apiKeyPlaceHolder } = require('./conf');
       ],
     );
 
-    console.log(`callId : ${callId}`);
-    console.log(`oracleId : ${oracleId}`);
-
     /*
   Checking if Dataset is here and replace the API key
   */
@@ -74,20 +65,6 @@ const { apiKeyPlaceHolder } = require('./conf');
 
       // eslint-disable-next-line max-len
       // if (paramSet.dataset !== datasetAddress) throw Error('The dataset used does not match dataset specified in the paramset');
-    }
-
-    let keyCount = 0;
-    keyCount += utils.occurrences(paramSet.url, apiKeyPlaceHolder);
-
-    switch (keyCount) {
-      case 0:
-        if (isDatasetPresent) throw Error('Dataset was provided without any api key placeholder to replace');
-        break;
-      case 1:
-        if (!isDatasetPresent) throw Error('Api key placeholder was found but no Dataset was provided');
-        break;
-      default:
-        throw Error(`Several api key placeholder were found while ${isDatasetPresent ? 1 : 0} was expected`);
     }
 
     const extractedValue = apiCall({
@@ -122,7 +99,6 @@ const { apiKeyPlaceHolder } = require('./conf');
     }
 
     // Declare everything is computed
-    console.log('Everything computed well, writing to computed.json');
     const computedJsonObj = {
       'callback-data': ethers.utils.defaultAbiCoder.encode(['bytes32', 'bytes'], [oracleId, result]),
     };
