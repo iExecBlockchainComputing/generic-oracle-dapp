@@ -7,16 +7,16 @@ const encodeValue = (value, dataType, oracleId) => {
 
   switch (dataType) {
     case 'number':
-      if (typeof extractedValue !== 'number') throw Error(`Expected a number value, got a ${typeof value}`);
+      if (typeof value !== 'number') throw Error(`Expected a number value, got a ${typeof value}`);
       finalNumber = ethers.BigNumber.from((new Big(value).times(new Big('1e18'))).toFixed());
       result = ethers.utils.defaultAbiCoder.encode(['int256'], [finalNumber]);
       break;
     case 'string':
-      if (typeof extractedValue !== 'string') throw Error(`Expected a string value, got a ${typeof value}`);
+      if (typeof value !== 'string') throw Error(`Expected a string value, got a ${typeof value}`);
       result = ethers.utils.defaultAbiCoder.encode(['string'], [value]);
       break;
     case 'boolean':
-      if (typeof extractedValue !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof value}`);
+      if (typeof value !== 'boolean') throw Error(`Expected a boolean value, got a ${typeof value}`);
       result = ethers.utils.defaultAbiCoder.encode(['bool'], [value]);
       break;
     default:
