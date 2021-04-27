@@ -39,8 +39,8 @@ const extractApiKey = async (dataset, paramSet) => {
       throw Error('Computed callId does not match dataset\'s callId \n'
         + `Computed ${callId} but found ${dataset.callId} in the dataset`);
 
-      // eslint-disable-next-line max-len
-      // if (paramSet.dataset !== datasetAddress) throw Error('The dataset used does not match dataset specified in the paramset');
+      // if (paramSet.dataset !== datasetAddress) 
+      // throw Error('The dataset used does not match dataset specified in the paramset');
     }
     apiKey = dataset.apiKey;
   }

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const fsPromises = require('fs').promises;
 const ethers = require('ethers');
 const utils = require('./utils');
