@@ -1,10 +1,10 @@
+const { ValidationError } = require('yup');
 const {
   strictCallParamsSchema,
   strictParamSetSchema,
   rawParamsSchema,
   jsonParamSetSchema,
 } = require('../src/validators');
-const { ValidationError } = require('../src/errors');
 
 describe('strictCallParamsSchema', () => {
   test('validate exact match', async () => {
