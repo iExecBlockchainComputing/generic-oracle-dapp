@@ -76,6 +76,28 @@ describe('extractApiKey', () => {
     const dataset = {
       apiKey: 'toto',
       callId: '0xca073d53779cadd3c2d4454c69e1cca95cf28bb6dcd202e825bfa723fe2a8bbf',
+      address: '0x0000000000000000000000000000000000000001',
+    };
+    const paramSet = {
+      url: 'https://api.openweathermap.org/data/2.5/weather?q=London&appid=%API_KEY%',
+      body: '',
+      headers: {
+      },
+      method: 'GET',
+      JSONPath: '$.sys.sunrise',
+      dataset: '0x0000000000000000000000000000000000000001',
+      dataType: 'number',
+    };
+    expect(() => {
+      extractApiKey(paramSet, dataset);
+    }).toThrow();
+  });
+
+  test('Fail when the callID doesnt match', async () => {
+    const dataset = {
+      apiKey: 'toto',
+      callId: '0xca073d53779cadd3c2d4454c69e1cca95cf28bb6dcd202e825bfa723fe2a8bbe',
+      address: '0x0000000000000000000000000000000000000002',
     };
     const paramSet = {
       url: 'https://api.openweathermap.org/data/2.5/weather?q=London&appid=%API_KEY%',
