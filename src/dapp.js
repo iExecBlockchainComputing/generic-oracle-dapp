@@ -17,7 +17,7 @@ module.exports = async () => {
   nbFileChecker(process.env.IEXEC_NB_INPUT_FILES);
 
   const validatedInputJSON = await jsonParamSetSchema()
-    .validate(await fsPromises.readFile(inputFilePath));
+    .validate((await fsPromises.readFile(inputFilePath)).toString());
   const paramSet = JSON.parse(validatedInputJSON);
   const dataset = extractDataset(process.env.IEXEC_IN, process.env.IEXEC_DATASET_FILENAME);
   dataset.address = process.env.IEXEC_DATASET_ADDRESS;
