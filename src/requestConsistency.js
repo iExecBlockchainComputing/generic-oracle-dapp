@@ -20,7 +20,7 @@ const extractDataset = async (iexecIn, iexecDatasetFilename) => {
   return isDatasetPresent ? JSON.parse(await fsPromises.readFile(datasetPath)) : undefined;
 };
 
-const extractApiKey = async (dataset, paramSet) => {
+const extractApiKey = async (paramSet, dataset) => {
   const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
 
   const callId = ethers.utils.solidityKeccak256(
@@ -35,12 +35,10 @@ const extractApiKey = async (dataset, paramSet) => {
 
   let apiKey;
   if (dataset !== undefined) {
+    if (paramSet.dataset !== dataset.address) throw Error('The dataset used does not match dataset specified in the paramset');
     if (callId !== dataset.callId) {
       throw Error('Computed callId does not match dataset\'s callId \n'
         + `Computed ${callId} but found ${dataset.callId} in the dataset`);
-
-      // if (paramSet.dataset !== datasetAddress) 
-      // throw Error('The dataset used does not match dataset specified in the paramset');
     }
     apiKey = dataset.apiKey;
   }
