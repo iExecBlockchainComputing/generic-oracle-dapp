@@ -15,10 +15,11 @@ const nbFileChecker = (nbFile) => {
 };
 
 const extractDataset = async (iexecIn, iexecDatasetFilename) => {
-  const isDatasetPresent = (typeof iexecDatasetFilename === 'string' && iexecDatasetFilename.length > 0);
-  const datasetPath = path.join(iexecIn, iexecDatasetFilename);
-
-  return isDatasetPresent ? JSON.parse(await fsPromises.readFile(datasetPath)) : undefined;
+  if (typeof iexecDatasetFilename === 'string' && iexecDatasetFilename.length > 0) {
+    const datasetPath = path.join(iexecIn, iexecDatasetFilename);
+    return JSON.parse(await fsPromises.readFile(datasetPath));
+  }
+  return undefined;
 };
 
 const extractApiKey = (paramSet, dataset) => {
