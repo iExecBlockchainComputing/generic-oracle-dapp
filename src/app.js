@@ -16,7 +16,7 @@ const { encodeValue } = require('./resultEncoder');
     const validatedInputJSON = await jsonParamSetSchema()
       .validate(await fsPromises.readFile(inputFilePath));
     const paramSet = JSON.parse(validatedInputJSON);
-    const dataset = extractDataset(process.env.IEXEC_IN, process.env.IEXEC_IN);
+    const dataset = extractDataset(process.env.IEXEC_IN, process.env.IEXEC_DATASET_FILENAME);
     const apiKey = extractApiKey(dataset, paramSet);
     const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
 
