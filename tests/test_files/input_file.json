@@ -1,0 +1,10 @@
+{
+    "url" : "https://api.openweathermap.org/data/2.5/weather?q=London&appid=%API_KEY%",
+    "body" : "",
+    "headers" : {
+    },
+    "method" : "GET",
+    "JSONPath" : "$.sys.sunrise",
+    "dataset" : "0x0000000000000000000000000000000000000001",
+    "dataType" : "number"
+}
