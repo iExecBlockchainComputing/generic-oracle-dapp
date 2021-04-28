@@ -19,9 +19,9 @@ module.exports = async () => {
   const validatedInputJSON = await jsonParamSetSchema()
     .validate((await fsPromises.readFile(inputFilePath)).toString());
   const paramSet = JSON.parse(validatedInputJSON);
-  const dataset = extractDataset(process.env.IEXEC_IN, process.env.IEXEC_DATASET_FILENAME);
+  const dataset = await extractDataset(process.env.IEXEC_IN, process.env.IEXEC_DATASET_FILENAME);
   dataset.address = process.env.IEXEC_DATASET_ADDRESS;
-  const apiKey = extractApiKey(dataset, paramSet);
+  const apiKey = extractApiKey(paramSet, dataset);
   const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
 
   const oracleId = ethers.utils.solidityKeccak256(
