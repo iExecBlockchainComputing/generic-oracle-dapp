@@ -34,7 +34,7 @@ const { encodeValue } = require('./resultEncoder');
       ],
     );
 
-    const extractedValue = apiCall({
+    const extractedValue = await apiCall({
       url: paramSet.url,
       method: paramSet.method,
       headers: paramSet.headers,

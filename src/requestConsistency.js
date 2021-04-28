@@ -21,7 +21,7 @@ const extractDataset = async (iexecIn, iexecDatasetFilename) => {
   return isDatasetPresent ? JSON.parse(await fsPromises.readFile(datasetPath)) : undefined;
 };
 
-const extractApiKey = async (paramSet, dataset) => {
+const extractApiKey = (paramSet, dataset) => {
   const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
 
   const callId = ethers.utils.solidityKeccak256(
