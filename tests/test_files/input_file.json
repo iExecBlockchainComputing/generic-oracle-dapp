@@ -4,7 +4,7 @@
     "headers" : {
     },
     "method" : "GET",
-    "JSONPath" : "$.sys.sunrise",
+    "JSONPath" : "$.bar.toto",
     "dataset" : "0x0000000000000000000000000000000000000001",
-    "dataType" : "number"
+    "dataType" : "string"
 }
