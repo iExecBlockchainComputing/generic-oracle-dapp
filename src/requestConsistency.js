@@ -1,5 +1,6 @@
 const fsPromises = require('fs').promises;
 const ethers = require('ethers');
+const path = require('path');
 const utils = require('./utils');
 
 const nbFileChecker = (nbFile) => {
@@ -14,8 +15,8 @@ const nbFileChecker = (nbFile) => {
 };
 
 const extractDataset = async (iexecIn, iexecDatasetFilename) => {
-  const datasetPath = `${iexecIn}/${iexecDatasetFilename}`;
   const isDatasetPresent = (typeof iexecDatasetFilename === 'string' && iexecDatasetFilename.length > 0);
+  const datasetPath = path.join(iexecIn, iexecDatasetFilename);
 
   return isDatasetPresent ? JSON.parse(await fsPromises.readFile(datasetPath)) : undefined;
 };

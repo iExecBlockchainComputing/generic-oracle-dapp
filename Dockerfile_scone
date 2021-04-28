@@ -7,6 +7,7 @@ RUN SCONE_MODE=sim npm install ethers@5.1.0
 RUN SCONE_MODE=sim npm install jsonpath@1.1.x
 RUN SCONE_MODE=sim npm install big.js@6.0.x
 RUN SCONE_MODE=sim npm install yup@0.32.x
+RUN SCONE_MODE=sim npm install path@0.12.x
 
 
 
