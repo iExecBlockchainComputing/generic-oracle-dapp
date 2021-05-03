@@ -42,3 +42,8 @@ The dataset itself should be a JSON with two fields :
 
 `"apiKey" :` the raw API key
 `"callParamsId" :` the hash of the used pararm set
+
+## Dapp Test
+
+To run the tests do `npm i` as sual then run `npm test`
+
