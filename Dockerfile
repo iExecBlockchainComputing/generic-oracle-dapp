@@ -1,6 +1,6 @@
 FROM node:14-alpine3.10
 
-RUN mkdir /app && cd /app
+WORKDIR /app
 
 RUN npm i node-fetch@2.6.x \
         ethers@5.1.0 \
