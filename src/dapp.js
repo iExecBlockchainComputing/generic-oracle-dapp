@@ -14,7 +14,7 @@ module.exports = async () => {
   );
   const outputRoot = process.env.IEXEC_OUT;
 
-  nbFileChecker(process.env.IEXEC_NB_INPUT_FILES);
+  nbFileChecker(process.env.IEXEC_INPUT_FILES_NUMBER);
 
   const validatedInputJSON = await jsonParamSetSchema()
     .validate((await fsPromises.readFile(inputFilePath)).toString());
