@@ -20,7 +20,7 @@ module.exports = async () => {
     .validate((await fsPromises.readFile(inputFilePath)).toString());
   const paramSet = JSON.parse(validatedInputJSON);
   const dataset = await extractDataset(process.env.IEXEC_IN, process.env.IEXEC_DATASET_FILENAME);
-  dataset.address = process.env.IEXEC_DATASET_ADDRESS;
+  if (dataset !== undefined) dataset.address = process.env.IEXEC_DATASET_ADDRESS;
   const apiKey = extractApiKey(paramSet, dataset);
   const headersTable = Object.entries(utils.sortObjKeys(paramSet.headers));
 
