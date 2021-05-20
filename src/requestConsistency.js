@@ -37,7 +37,7 @@ const extractApiKey = (paramSet, dataset) => {
 
   let apiKey;
   if (dataset !== undefined) {
-    if (paramSet.dataset !== dataset.address) throw Error('The dataset used does not match dataset specified in the paramset');
+    if (paramSet.dataset.toLowerCase() !== dataset.address.toLowerCase()) throw Error('The dataset used does not match dataset specified in the paramset');
     if (callId !== dataset.callId) {
       throw Error('Computed callId does not match dataset\'s callId \n'
         + `Computed ${callId} but found ${dataset.callId} in the dataset`);
