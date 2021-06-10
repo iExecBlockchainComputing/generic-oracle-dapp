@@ -1,11 +1,14 @@
-FROM node:10
-RUN mkdir /app && cd /app
-RUN npm i node-fetch@2.6.x
-RUN npm i ethers@5.1.0
-RUN npm i jsonpath@1.1.x
-RUN npm i big.js@6.0.x
-RUN npm i yup@0.32.x
-RUN npm i path@0.12.x
+FROM node:14-alpine3.10
+
+WORKDIR /app
+
+RUN npm i node-fetch@2.6.x \
+        ethers@5.1.0 \
+        jsonpath@1.1.x \
+        big.js@6.0.x \
+        yup@0.32.x \
+        path@0.12.x
 
 COPY ./src /app
+
 ENTRYPOINT [ "node", "/app/app.js"]
