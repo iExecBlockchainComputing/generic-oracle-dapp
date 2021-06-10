@@ -63,21 +63,21 @@ const apiCall = async (rawParams) => {
           `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "boolean"\` to store ${typeofSelected}`,
         );
       }
-      return selected;
+      break;
     case 'string':
       if (dataType !== 'string') {
         throw Error(
           `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "string"\` to store ${typeofSelected}`,
         );
       }
-      return selected;
+      break;
     case 'number':
       if (dataType !== 'number') {
         throw Error(
           `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "number"\` to store ${typeofSelected}`,
         );
       }
-      return selected;
+      break;
     default:
       throw Error(
         `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, it must be string, number or boolean:\n${JSON.stringify(
@@ -87,6 +87,9 @@ const apiCall = async (rawParams) => {
         )}`,
       );
   }
+  const date = Math.floor((new Date(res.headers.get('date'))).getTime() / 1000);
+
+  return { value: selected, date };
 };
 
 module.exports = {

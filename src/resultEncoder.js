@@ -1,7 +1,7 @@
 const ethers = require('ethers');
 const Big = require('big.js');
 
-const encodeValue = (value, dataType, oracleId) => {
+const encodeValue = (value, date, dataType, oracleId) => {
   let result;
   let finalNumber;
 
@@ -23,7 +23,7 @@ const encodeValue = (value, dataType, oracleId) => {
       throw Error(`Expected a data type in this list : number, string, boolean. Got ${dataType}`);
   }
 
-  return ethers.utils.defaultAbiCoder.encode(['bytes32', 'bytes'], [oracleId, result]);
+  return ethers.utils.defaultAbiCoder.encode(['bytes32', 'uint256', 'bytes'], [oracleId, date, result]);
 };
 
 module.exports = {

@@ -11,6 +11,9 @@ describe('apiCall', () => {
   test('standard - perfom fetch with %API_KEY% placeholder replacement in url and headers', async () => {
     fetch.mockImplementation(async () => ({
       json: () => Promise.resolve({ foo: false, bar: true }),
+      headers: {
+        get: () => Promise.resolve(''),
+      },
     }));
     await apiCall({
       url: 'https://foo.io?query=bar&apiKey=%API_KEY%',
@@ -53,6 +56,9 @@ describe('apiCall', () => {
   test('standard - dataType boolean', async () => {
     fetch.mockImplementationOnce(async () => ({
       json: () => Promise.resolve({ foo: false, bar: true }),
+      headers: {
+        get: () => Promise.resolve(''),
+      },
     }));
     const res = await apiCall({
       url: 'https://foo.io?query=bar',
@@ -60,12 +66,15 @@ describe('apiCall', () => {
       dataType: 'boolean',
       JSONPath: '$.bar',
     });
-    expect(res).toBe(true);
+    expect(res.value).toBe(true);
   });
 
   test('standard - dataType number', async () => {
     fetch.mockImplementationOnce(async () => ({
       json: () => Promise.resolve({ foo: -10, bar: 1.23456789 }),
+      headers: {
+        get: () => Promise.resolve(''),
+      },
     }));
     const res = await apiCall({
       url: 'https://foo.io?query=bar',
@@ -73,12 +82,15 @@ describe('apiCall', () => {
       dataType: 'number',
       JSONPath: '$.bar',
     });
-    expect(res).toBe(1.23456789);
+    expect(res.value).toBe(1.23456789);
   });
 
   test('standard - dataType string', async () => {
     fetch.mockImplementationOnce(async () => ({
       json: () => Promise.resolve({ foo: '-10', bar: '1.23456789' }),
+      headers: {
+        get: () => Promise.resolve(''),
+      },
     }));
     const res = await apiCall({
       url: 'https://foo.io?query=bar',
@@ -86,7 +98,7 @@ describe('apiCall', () => {
       dataType: 'string',
       JSONPath: '$.bar',
     });
-    expect(res).toBe('1.23456789');
+    expect(res.value).toBe('1.23456789');
   });
 
   test('error - throw when fetch throws', async () => {
