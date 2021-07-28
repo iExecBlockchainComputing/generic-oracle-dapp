@@ -16,6 +16,9 @@ describe('dapp', () => {
           toto: 'titi',
         },
       }),
+      headers: {
+        get: () => 'Thu, 10 Jun 2021 09:58:20 GMT',
+      },
     }));
     process.env.IEXEC_INPUT_FILES_FOLDER = './tests/test_files';
     process.env.IEXEC_INPUT_FILE_NAME_1 = 'input_file.json';

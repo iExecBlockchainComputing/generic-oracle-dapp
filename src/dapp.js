@@ -37,7 +37,7 @@ module.exports = async () => {
     ],
   );
 
-  const extractedValue = await apiCall({
+  const { value, date } = await apiCall({
     url: paramSet.url,
     method: paramSet.method,
     headers: paramSet.headers,
@@ -47,7 +47,7 @@ module.exports = async () => {
     dataType: paramSet.dataType,
   });
 
-  const encodedValue = encodeValue(extractedValue, paramSet.dataType, oracleId);
+  const encodedValue = encodeValue(value, date, paramSet.dataType, oracleId);
 
   // Declare everything is computed
   const computedJsonObj = {
