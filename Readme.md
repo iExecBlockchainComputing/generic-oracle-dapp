@@ -5,6 +5,7 @@ This application is meant to build a docker container usable in SGX iexec tasks.
 The target API must answer by a JSON response.
 
 ---
+
 ## Parameters set spec
 
 ⚠️ **DO NEVER PUT YOUR API KEY INSIDE THE PARAM SET**
@@ -15,7 +16,7 @@ The parameters must be a correct JSON object with those fields, no default value
 
 - `"dataType" :` Must contain "number" or "string" to specify the expected type of the data
 
-- `"dataset" :` The ethereum address hex string of the dataset smart contract. 
+- `"dataset" :` The ethereum address hex string of the dataset smart contract.
 
 - `"headers" : ` Contain a sub object composed of the http request headers key - values
 
@@ -25,14 +26,13 @@ The parameters must be a correct JSON object with those fields, no default value
 
 - `"url" :` Should contain the full URL of the API endpoint. **Note that any call to a non-https URL will fail**
 
-
 The dataset is the only optional field. Adding an unexpected field will produce an error.
 
 ## Specify an api key
 
 Param set are meant to be publicly revealed, therefore, api keys can't be directly put inside the param set.
 
-To specify where the API key should be, insert the string `%API_KEY%` instead. This string will be replaced by the api key in the dataset if it's found in the `url`, `body` or one of the `header`  field.
+To specify where the API key should be, insert the string `%API_KEY%` instead. This string will be replaced by the api key in the dataset if it's found in the `url`, `body` or one of the `header` field.
 
 The API key itself should be specified in the dataset
 
@@ -47,3 +47,15 @@ The dataset itself should be a JSON with two fields :
 
 To run the tests do `npm i` as sual then run `npm test`
 
+## Build TEE debug image
+
+Prerequisites:
+
+- bash
+- docker
+- SCONE community account
+- SCONE build tools for iExec
+
+```
+npm run build
+```

@@ -2,12 +2,10 @@ FROM node:14-alpine3.10
 
 WORKDIR /app
 
-RUN npm i node-fetch@2.6.x \
-        ethers@5.1.0 \
-        jsonpath@1.1.x \
-        big.js@6.0.x \
-        yup@0.32.x \
-        path@0.12.x
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+RUN npm ci --only=production
 
 COPY ./src /app
 
