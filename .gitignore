@@ -1,1 +1,8 @@
 node_modules
+
+tests/test_out
+
+coverage/
+
+.env
+

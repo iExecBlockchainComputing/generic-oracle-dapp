@@ -4,6 +4,10 @@ This application is meant to build a docker container usable in SGX iexec tasks.
 
 The target API must answer by a JSON response.
 
+## Build the project
+
+* Copy smart-contract TS files to `contracts/typechain/`
+
 ---
 
 ## Parameters set spec

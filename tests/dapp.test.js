@@ -7,6 +7,7 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
+
 describe('dapp', () => {
   test('a full successful dapp run', async () => {
     fetch.mockImplementation(async () => ({
@@ -28,6 +29,6 @@ describe('dapp', () => {
     process.env.IEXEC_DATASET_FILENAME = 'full-dataset.json';
     process.env.IEXEC_DATASET_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-    await dapp();
-  });
+    await new dapp.Dapp().start();
+  }, 30000);
 });
