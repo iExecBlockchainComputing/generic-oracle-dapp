@@ -1,10 +1,5 @@
-node_modules
-
-tests/test_out/computed.json
-
-coverage/
-
 .env
-
+node_modules/
+coverage/
 app/
-
+tests/test_out/computed.json

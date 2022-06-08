@@ -6,9 +6,9 @@ The target API must answer by a JSON response.
 
 ## Build the project
 
-* See Dockerfile
-
-//TODO: Add tests to pipeline
+```
+docker image build -f docker/Dockerfile -t generic-oracle-dapp:local .
+```
 
 ---
 

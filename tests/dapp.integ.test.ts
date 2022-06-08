@@ -1,22 +1,5 @@
-//const fetch = require('node-fetch');
 import { config as dotEnvConfig } from "dotenv";
-
-
-
-
 import { Dapp } from '../src/dapp';
-
-
-//const dapp = require('../src/dapp');
-
-
-
-//jest.mock('node-fetch');
-
-afterEach(() => {
-  //jest.resetAllMocks();
-});
-
 
 describe('dapp', () => {
 
