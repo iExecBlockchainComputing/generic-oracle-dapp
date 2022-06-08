@@ -17,7 +17,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "noFallthroughCasesInSwitch": true,
-    "outDir": "./dist"
+    "outDir": "./app"
   },
   "compileOnSave": true,
   "include": [
