@@ -1,8 +1,8 @@
 FROM node:16-alpine
 
-RUN npm install --location=global npm@8.12
-
 WORKDIR /app
+
+RUN npm install --location=global npm@8.12
 
 COPY package.json package-lock.json tsconfig.json ./
 COPY src/ .
