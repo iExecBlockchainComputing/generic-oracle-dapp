@@ -4,12 +4,6 @@ This application is meant to build a docker container usable in SGX iexec tasks.
 
 The target API must answer by a JSON response.
 
-## Build the project
-
-```
-docker image build -f docker/Dockerfile -t generic-oracle-dapp:local .
-```
-
 ---
 
 ## Parameters set spec
@@ -53,6 +47,12 @@ The dataset itself should be a JSON with two fields :
 
 To run the tests do `npm i` as sual then run `npm test`
 
+## Build native image
+
+```
+docker image build -f docker/Dockerfile -t generic-oracle-dapp:local .
+```
+
 ## Build TEE debug image
 
 Prerequisites:
@@ -63,5 +63,5 @@ Prerequisites:
 - SCONE build tools for iExec
 
 ```
-npm run build
+npm run scone
 ```
