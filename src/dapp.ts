@@ -1,19 +1,12 @@
-const fsPromises = require('fs').promises;
-const path = require('path');
-import { Contract } from "ethers";
-//const ethers = require('ethers');
+import fsPromises from 'fs/promises';
+import path from 'path';
+import utils from './utils';
+import { apiCall } from './caller';
+import { jsonParamSetSchema } from './validators';
+import { nbFileChecker, extractDataset, extractApiKey } from './requestConsistency';
+import { encodeValue } from './resultEncoder';
 import { ethers } from "ethers";
-import { expect } from "chai";
-import { Signer } from "ethers";
-
-const utils = require('./utils');
-const { apiCall } = require('./caller');
-const { jsonParamSetSchema } = require('./validators');
-const { nbFileChecker, extractDataset, extractApiKey } = require('./requestConsistency');
-const { encodeValue } = require('./resultEncoder');
-
-import { ClassicOracle, ClassicOracle__factory } from "../contracts/typechain";
-import { exit } from "process";
+import { ClassicOracle, ClassicOracle__factory } from "@jeremyjames/generic-oracle-contracts/typechain";
 
 const chain = "goerli";
 const oracleReceiver = '0x28291E6A81aC30cE6099144E68D8aEeE2b64052b'
@@ -30,12 +23,23 @@ export class Dapp {
       args = this.getTargetChainArgs();
     } catch (e) {
       console.error("Failed to parse app developer secret [e:%s]", e);
-      await this.writeCallbackAndExit(encodedValue);
+      await this.writeCallbackAndExit(ethers.constants.HashZero);
+    }
+
+    const inputFileFolder = process.env.IEXEC_INPUT_FILES_FOLDER;
+    if (inputFileFolder == undefined) {
+      throw Error('IEXEC_INPUT_FILES_FOLDER env var is required');
+      //TODO write callback
+    }
+    const inputFile1Name = process.env.IEXEC_INPUT_FILE_NAME_1;
+    if (inputFile1Name == undefined) {
+      throw Error('IEXEC_INPUT_FILE_NAME_1 env var is required');
+      //TODO write callback
     }
 
     const inputFilePath = path.join(
-      process.env.IEXEC_INPUT_FILES_FOLDER,
-      process.env.IEXEC_INPUT_FILE_NAME_1,
+      inputFileFolder,
+      inputFile1Name,
     );
 
     nbFileChecker(process.env.IEXEC_INPUT_FILES_NUMBER);
@@ -70,9 +74,9 @@ export class Dapp {
       JSONPath: paramSet.JSONPath,
       dataType: paramSet.dataType,
     });
-    console.log("Received response from API [url:%s, date:%s, value:%s, hexValue:%s]", paramSet.url, new Date(date * 1000), value)
+    console.log("Received response from API [url:%s, date:%s, value:%s]", paramSet.url, new Date(date * 1000), value)
 
-    var encodedValue = encodeValue(value, date, paramSet.dataType, oracleId);
+    var encodedValue: string | undefined = encodeValue(value, date, paramSet.dataType, oracleId);
 
     try {
       const classicOracle: ClassicOracle = this.loadOraleReceiverContract(args)
@@ -131,7 +135,7 @@ export class Dapp {
       .connect(wallet);
   }
 
-  private writeCallbackAndExit = async (callbackData: string) => {
+  private writeCallbackAndExit = async (callbackData: string | undefined) => {
     // Declare everything is computed
     const computedJsonObj = {
       'callback-data': callbackData != undefined ? callbackData : ethers.constants.HashZero,

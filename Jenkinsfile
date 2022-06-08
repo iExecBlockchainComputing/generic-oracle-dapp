@@ -9,7 +9,6 @@ buildSimpleDocker_v3(
         visibility: 'iex.ec')
 
 sconeBuildAllTee(
-        nativeImage: nativeImage,
         imageRegistry: 'docker-regis.iex.ec',
         imageName: appName,
         imageTag: buildInfo.imageTag,

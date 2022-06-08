@@ -1,8 +1,10 @@
 node_modules
 
-tests/test_out
+tests/test_out/computed.json
 
 coverage/
 
 .env
+
+dist/
 
