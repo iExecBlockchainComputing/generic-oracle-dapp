@@ -1,12 +1,16 @@
-FROM node:14-alpine3.10
+FROM node:16
+
+RUN npm install --location=global npm@8.12
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package.json package-lock.json tsconfig.json ./
+COPY src/ .
 
-RUN npm ci --only=production
+#ci?
+RUN npm i
 
-COPY ./src /app
+#multi-stage then dist only?
+RUN npm run build
 
-ENTRYPOINT [ "node", "/app/app.js"]
+ENTRYPOINT [ "node", "dist/app.js"]
