@@ -32,6 +32,7 @@ describe('dapp', () => {
   });
 
   test('a full successful dapp IT run without dataset', async () => {
+    dotEnvConfig();
     process.env.IEXEC_APP_DEVELOPER_SECRET =
       buildAppSecretWithValidInfuraProcessEnv(process.env.TARGET_PRIVATE_KEY)
     process.env.IEXEC_INPUT_FILES_NUMBER = '1';

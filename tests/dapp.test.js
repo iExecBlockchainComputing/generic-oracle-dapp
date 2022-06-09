@@ -29,6 +29,6 @@ describe('dapp', () => {
     process.env.IEXEC_DATASET_FILENAME = 'full-dataset.json';
     process.env.IEXEC_DATASET_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-    //await new dapp.Dapp().start();
+    //await new dapp.Dapp().start(); //for faster testing, commented for now
   }, 30000);
 });
