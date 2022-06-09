@@ -1,20 +1,35 @@
-const { nbFileChecker, extractDataset, extractApiKey } = require('../src/requestConsistency');
+const { getInputFilePath, extractDataset, extractApiKey } = require('../src/requestConsistency');
 
-describe('nbFileChecker', () => {
+const inputFolder = '/in'
+const inputFilename = 'input.txt'
+
+describe('getInputFilePath', () => {
+  test('Fail if no inputFolder', () => {
+    expect(() => {
+      getInputFilePath(undefined, inputFilename, '1');
+    }).toThrow(Error('IEXEC_IN env var is required'));
+  });
+
+  test('Fail if no inputFilename', () => {
+    expect(() => {
+      getInputFilePath(inputFolder, undefined, '1');
+    }).toThrow(Error('IEXEC_INPUT_FILE_NAME_1 env var is required'));
+  });
+
   test('Fail if no file', () => {
     expect(() => {
-      nbFileChecker('0');
+      getInputFilePath(inputFolder, inputFilename, '0');
     }).toThrow(Error('Paramset missing in input files'));
   });
 
   test('Fail if too much files', () => {
     expect(() => {
-      nbFileChecker('2');
+      getInputFilePath(inputFolder, inputFilename, '2');
     }).toThrow(Error('Several input files detected while expected one'));
   });
 
   test('Do nothing if 1 file', () => {
-    expect(nbFileChecker('1')).toBeUndefined();
+    expect(getInputFilePath(inputFolder, inputFilename, '1')).toEqual('/in/input.txt');
   });
 });
 

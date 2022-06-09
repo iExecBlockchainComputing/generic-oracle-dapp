@@ -3,7 +3,14 @@ const ethers = require('ethers');
 const path = require('path');
 const utils = require('./utils');
 
-const nbFileChecker = (nbFile) => {
+const getInputFilePath = (inputFolder, inputFile1Name, nbFile) => {
+  if (inputFolder == undefined) {
+    throw Error('IEXEC_IN env var is required');
+  }
+  if (inputFile1Name == undefined) {
+    throw Error('IEXEC_INPUT_FILE_NAME_1 env var is required');
+  }
+
   switch (nbFile) {
     case '0':
       throw Error('Paramset missing in input files');
@@ -12,6 +19,8 @@ const nbFileChecker = (nbFile) => {
     default:
       throw Error('Several input files detected while expected one');
   }
+
+  return path.join(inputFolder,inputFile1Name);
 };
 
 const extractDataset = async (iexecIn, iexecDatasetFilename) => {
@@ -48,7 +57,7 @@ const extractApiKey = (paramSet, dataset) => {
   return apiKey;
 };
 module.exports = {
-  nbFileChecker,
+  getInputFilePath,
   extractDataset,
   extractApiKey,
 };

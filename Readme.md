@@ -47,6 +47,14 @@ The dataset itself should be a JSON with two fields :
 
 To run the tests do `npm i` as sual then run `npm test`
 
+For having all tests as successful, add a `.env` symlink at the root folder of the project pointing somewhere on your host:
+`.env -> .env-oracle-itest`
+```
+INFURA_PROJECT_ID=
+INFURA_PROJECT_SECRET=
+TARGET_PRIVATE_KEY=
+```
+
 ## Build native image
 
 ```
