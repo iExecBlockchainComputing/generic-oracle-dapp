@@ -73,3 +73,31 @@ Prerequisites:
 ```
 npm run scone
 ```
+
+## Test Dapp on live network
+
+
+### As app developer: create app and set secrets
+```
+iexec app deploy --chain bellecour
+```
+
+```
+iexec-core-cli app push-owner-secret --secret=$MY_SECRETS --sms=<sms_url> --wallet-path=/tmp/wallet.json --wallet-password
+```
+
+```
+iexec order sign --app --chain bellecour
+```
+
+### As requester: trigger crosschain app
+
+```
+iexec order sign --request --chain bellecour
+```
+```
+iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour
+```
+```
+iexec order fill --chain bellecour --workerpool <order>
+```
