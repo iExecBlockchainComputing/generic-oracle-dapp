@@ -1,13 +1,12 @@
 import { config as dotEnvConfig } from "dotenv";
 import { Dapp } from "../src/dapp";
-import { expect } from "chai";
 const somePrivateKey =
   "0x0000000000000000000000000000000000000000000000000000000000000001";
 
 describe("dapp", () => {
   test("should fail since no app developer secret", async () => {
     const callbackData = await new Dapp().start();
-    expect(callbackData).to.equal(undefined);
+    expect(callbackData).toBeUndefined();
   });
 
   test("should fail since no inputfile", async () => {
@@ -15,7 +14,7 @@ describe("dapp", () => {
       buildAppSecretWithValidInfuraProcessEnv(somePrivateKey);
 
     const callbackData = await new Dapp().start();
-    expect(callbackData).to.equal(undefined);
+    expect(callbackData).toBeUndefined();
   });
 
   test("should fail since tx failed", async () => {
@@ -28,7 +27,7 @@ describe("dapp", () => {
     process.env.IEXEC_IN = "./tests/test_files";
 
     const callbackData = await new Dapp().start();
-    expect(callbackData).to.equal(undefined);
+    expect(callbackData).toBeUndefined();
   });
 
   test("a full successful dapp IT run without dataset", async () => {
@@ -42,8 +41,8 @@ describe("dapp", () => {
     process.env.IEXEC_IN = "./tests/test_files";
 
     const callbackData = await new Dapp().start();
-    expect(callbackData).not.equal(undefined);
-    expect(parseInt(callbackData ? callbackData : "0x")).not.equal(0);
+    expect(callbackData).not.toBeUndefined();
+    expect(parseInt(callbackData ? callbackData : "0x")).not.toEqual(0);
     console.log(
       "IEXEC_APP_DEVELOPER_SECRET:" + process.env.IEXEC_APP_DEVELOPER_SECRET
     ); //read value to use it directly for a staging SMS
