@@ -1,9 +1,8 @@
 import fsPromises from "fs/promises";
 import { ethers } from "ethers";
-import { Dapp } from "./dapp";
+import dapp from "./dapp";
 
-new Dapp()
-  .start()
+dapp()
   .then(async (callbackData) => {
     // Declare everything is computed
     const computedJsonObj = {

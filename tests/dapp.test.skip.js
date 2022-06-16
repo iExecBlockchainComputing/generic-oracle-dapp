@@ -1,5 +1,5 @@
-const fetch = require("node-fetch");
-const dapp = require("../src/dapp");
+import { fetch } from "node-fetch";
+import Dapp from "../src/dapp";
 
 jest.mock("node-fetch");
 
@@ -30,6 +30,6 @@ describe("dapp", () => {
     process.env.IEXEC_DATASET_ADDRESS =
       "0x0000000000000000000000000000000000000001";
 
-    await new dapp.Dapp().start();
+    await Dapp();
   }, 30000);
 });

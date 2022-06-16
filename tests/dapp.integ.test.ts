@@ -1,11 +1,11 @@
 import { config as dotEnvConfig } from "dotenv";
-import { Dapp } from "../src/dapp";
+import Dapp from "../src/dapp";
 const somePrivateKey =
   "0x0000000000000000000000000000000000000000000000000000000000000001";
 
 describe("dapp", () => {
   test("should fail since no app developer secret", async () => {
-    const callbackData = await new Dapp().start();
+    const callbackData = await Dapp();
     expect(callbackData).toBeUndefined();
   });
 
@@ -13,7 +13,7 @@ describe("dapp", () => {
     process.env.IEXEC_APP_DEVELOPER_SECRET =
       buildAppSecretWithValidInfuraProcessEnv(somePrivateKey);
 
-    const callbackData = await new Dapp().start();
+    const callbackData = await Dapp();
     expect(callbackData).toBeUndefined();
   });
 
@@ -26,7 +26,7 @@ describe("dapp", () => {
     process.env.IEXEC_OUT = "./tests/test_out";
     process.env.IEXEC_IN = "./tests/test_files";
 
-    const callbackData = await new Dapp().start();
+    const callbackData = await Dapp();
     expect(callbackData).toBeUndefined();
   });
 
@@ -40,7 +40,7 @@ describe("dapp", () => {
     process.env.IEXEC_OUT = "./tests/test_out";
     process.env.IEXEC_IN = "./tests/test_files";
 
-    const callbackData = await new Dapp().start();
+    const callbackData = await Dapp();
     expect(callbackData).not.toBeUndefined();
     expect(parseInt(callbackData ? callbackData : "0x")).not.toEqual(0);
     console.log(
