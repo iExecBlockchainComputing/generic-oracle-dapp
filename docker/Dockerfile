@@ -9,6 +9,8 @@ RUN npm ci
 #TODO: Add automated testing somewhere
 RUN npm run build
 
+RUN cd app/ && mv * ../
+
 RUN ls -la
 
 ENTRYPOINT [ "node", "/app/app.js"]
