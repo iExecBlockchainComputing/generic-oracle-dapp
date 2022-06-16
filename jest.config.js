@@ -6,5 +6,5 @@ module.exports = {
   testPathIgnorePatterns: ["/lib/", "/node_modules/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverage: true,
-  transformIgnorePatterns: ['node_modules/(?!(@jeremyjames)/)'], //Jest encountered an unexpected token 'export'
+  transformIgnorePatterns: ["node_modules/(?!(@jeremyjames)/)"], //Jest encountered an unexpected token 'export'
 };
