@@ -9,7 +9,7 @@ RUN npm ci
 #TODO: Add automated testing somewhere
 RUN npm run build
 
-RUN cd app/ && mv *.js ../
+RUN cp -R app/* ./
 
 RUN ls -la
 
