@@ -22,6 +22,6 @@
   "compileOnSave": true,
   "include": [
     ".",
-    "node_modules/@jeremyjames/generic-oracle-contracts/typechain"
+    "node_modules/@iexec/generic-oracle-contracts/typechain"
   ],
 }

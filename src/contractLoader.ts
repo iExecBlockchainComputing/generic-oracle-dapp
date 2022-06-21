@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import {
   ClassicOracle,
   ClassicOracle__factory,
-} from "@jeremyjames/generic-oracle-contracts/typechain";
+} from "@iexec/generic-oracle-contracts/typechain";
 
 const chain = "goerli";
 const oracleReceiver = "0x28291E6A81aC30cE6099144E68D8aEeE2b64052b";
