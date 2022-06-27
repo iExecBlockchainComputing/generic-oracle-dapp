@@ -60,7 +60,11 @@ describe("contract loader", () => {
   });
 });
 
-function encode(appDeveloperSecretJson: any) {
+function encode(appDeveloperSecretJson: {
+  infuraProjectId?: string;
+  infuraProjectSecret?: string;
+  targetPrivateKey?: string;
+}) {
   const appDeveloperSecretJsonString = JSON.stringify(appDeveloperSecretJson);
   const buff = Buffer.from(appDeveloperSecretJsonString, "utf-8");
   return buff.toString("base64");
