@@ -17,5 +17,9 @@
     "outDir": "./app"
   },
   "compileOnSave": true,
-  "include": [".", "node_modules/@iexec/generic-oracle-contracts/typechain"]
+  "include": [
+    "src",
+    "tests",
+    "node_modules/@iexec/generic-oracle-contracts/typechain"
+  ]
 }
