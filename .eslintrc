@@ -8,6 +8,7 @@
     "ecmaVersion": 2020
   },
   "extends": ["eslint:recommended", "prettier"],
+  "ignorePatterns": ["app/*"],
   // TS override
   "overrides": [
     {
