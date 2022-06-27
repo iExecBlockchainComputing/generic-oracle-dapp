@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,8 +17,5 @@
     "outDir": "./app"
   },
   "compileOnSave": true,
-  "include": [
-    ".",
-    "node_modules/@iexec/generic-oracle-contracts/typechain"
-  ],
+  "include": [".", "node_modules/@iexec/generic-oracle-contracts/typechain"]
 }
