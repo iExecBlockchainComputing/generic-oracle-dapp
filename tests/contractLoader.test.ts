@@ -10,7 +10,13 @@ describe("contract loader", () => {
   test("should fail since empty args", () => {
     expect(() => {
       ContractLoader.loadClassicOracle("");
-    }).toThrowError("Unexpected end of JSON input");
+    }).toThrowError("Failed to parse appDeveloperSecret JSON");
+  });
+
+  test("should fail since parse payload failed", () => {
+    expect(() => {
+      ContractLoader.loadClassicOracle(JSON.stringify({ some: "data" }));
+    }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
   test("should fail since no infuraProjectId", () => {

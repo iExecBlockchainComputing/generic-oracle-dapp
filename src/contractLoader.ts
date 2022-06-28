@@ -17,9 +17,13 @@ export class ContractLoader {
     }
     const buff = Buffer.from(encodedArgs, "base64");
     const appDeveloperSecretsJsonString = buff.toString();
-    const appDeveloperSecretJson: OracleArgs = JSON.parse(
-      appDeveloperSecretsJsonString
-    );
+
+    let appDeveloperSecretJson: OracleArgs;
+    try {
+      appDeveloperSecretJson = JSON.parse(appDeveloperSecretsJsonString);
+    } catch (e) {
+      throw Error("Failed to parse appDeveloperSecret JSON");
+    }
 
     const infuraProjectId = appDeveloperSecretJson.infuraProjectId;
     if (infuraProjectId == undefined) {
