@@ -16,7 +16,7 @@ export class ContractLoader {
       throw Error("Encoded args are required");
     }
     const buff = Buffer.from(encodedArgs, "base64");
-    const appDeveloperSecretsJsonString = buff.toString("utf-8");
+    const appDeveloperSecretsJsonString = buff.toString();
     const appDeveloperSecretJson: OracleArgs = JSON.parse(
       appDeveloperSecretsJsonString
     );
