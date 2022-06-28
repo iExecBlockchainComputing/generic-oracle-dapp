@@ -84,7 +84,7 @@ const start = async () => {
   );
 
   try {
-    const tx: ethers.ContractTransaction = await classicOracle.receiveResult(
+    const tx = await classicOracle.receiveResult(
       oracleId,
       encodedValue
     );
