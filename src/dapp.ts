@@ -76,18 +76,16 @@ const start = async () => {
     value
   );
 
-  const encodedValue: string | undefined = encodeValue(
-    value,
-    date,
-    paramSet.dataType,
-    oracleId
-  );
+  let encodedValue: string;
+  try {
+    encodedValue = encodeValue(value, date, paramSet.dataType, oracleId);
+  } catch (e) {
+    console.error("Failed to encode value [e:%s]", e);
+    return undefined;
+  }
 
   try {
-    const tx = await classicOracle.receiveResult(
-      oracleId,
-      encodedValue
-    );
+    const tx = await classicOracle.receiveResult(oracleId, encodedValue);
     console.log(
       "Sent transaction to targeted oracle [tx:%s, oracleId:%s, encodedValue:%s]",
       tx.hash,
