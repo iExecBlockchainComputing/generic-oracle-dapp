@@ -43,9 +43,12 @@ describe("dapp", () => {
     const callbackData = await Dapp();
     expect(callbackData).not.toBeUndefined();
     expect(parseInt(callbackData ? callbackData : "0x")).not.toEqual(0);
+    /*
+    //read value to use it directly for a staging SMS
     console.log(
       "IEXEC_APP_DEVELOPER_SECRET:" + process.env.IEXEC_APP_DEVELOPER_SECRET
-    ); //read value to use it directly for a staging SMS
+    ); 
+    */
   }, 60000); //sending tx takes some time
 });
 

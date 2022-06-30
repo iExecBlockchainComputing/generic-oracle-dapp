@@ -90,21 +90,24 @@ const start = async () => {
       oracleId,
       encodedValue
     );
-    const receipt = await tx.wait();
-    if (receipt.blockNumber) {
-      console.log(
-        "Mined transaction for targeted oracle [tx:%s, blockNumber:%s, oracleId:%s]",
-        tx.hash,
-        receipt.blockNumber,
-        oracleId
-      );
-      return encodedValue;
-    } else {
-      console.error("Failed transaction on targeted oracle [tx:%s]", tx.hash);
-    }
+    return tx
+      .wait()
+      .then((receipt) => {
+        console.log(
+          "Mined transaction for targeted oracle [tx:%s, blockNumber:%s, oracleId:%s]",
+          tx.hash,
+          receipt.blockNumber,
+          oracleId
+        );
+        return encodedValue;
+      })
+      .catch((e) => {
+        console.error("Failed transaction on targeted oracle [e:%s]", e);
+        return undefined;
+      });
   } catch (e) {
     console.error("Failed to send transaction [e:%s]", e);
+    return undefined;
   }
-  return undefined;
 };
 export default start;
