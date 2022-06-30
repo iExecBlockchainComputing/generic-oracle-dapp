@@ -1,6 +1,6 @@
 import fsPromises from "fs/promises";
 import utils from "./utils";
-import { ContractLoader } from "./contractLoader";
+import { loadClassicOracle } from "../src/contractLoader";
 import { apiCall } from "./caller";
 import { jsonParamSetSchema } from "./validators";
 import {
@@ -15,9 +15,7 @@ const start = async () => {
   let classicOracle;
   try {
     // validate args or exit before going further
-    classicOracle = ContractLoader.loadClassicOracle(
-      process.env.IEXEC_APP_DEVELOPER_SECRET
-    );
+    classicOracle = loadClassicOracle(process.env.IEXEC_APP_DEVELOPER_SECRET);
   } catch (e) {
     console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
     return undefined;
