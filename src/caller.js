@@ -1,18 +1,11 @@
-const fetch = require('node-fetch');
-const jp = require('jsonpath');
-const { rawParamsSchema } = require('./validators');
-const { API_KEY_PLACEHOLDER } = require('./conf');
+const fetch = require("node-fetch");
+const jp = require("jsonpath");
+const { rawParamsSchema } = require("./validators");
+const { API_KEY_PLACEHOLDER } = require("./conf");
 
 const apiCall = async (rawParams) => {
-  const {
-    url,
-    method,
-    headers,
-    body,
-    apiKey,
-    JSONPath,
-    dataType,
-  } = await rawParamsSchema().validate(rawParams);
+  const { url, method, headers, body, apiKey, JSONPath, dataType } =
+    await rawParamsSchema().validate(rawParams);
 
   const finalUrl = url.replace(API_KEY_PLACEHOLDER, apiKey);
   const finalHeaders = Object.entries(headers)
@@ -25,12 +18,12 @@ const apiCall = async (rawParams) => {
     ...(body && { body }),
   }).catch((e) => {
     throw Error(
-      `Failed get a response from the API (${e})\nYou can:\n- check your connection\n- check the API url\n- check the HTTP method\n- check the API allows CORS`,
+      `Failed get a response from the API (${e})\nYou can:\n- check your connection\n- check the API url\n- check the HTTP method\n- check the API allows CORS`
     );
   });
 
   const json = await res.json().catch(() => {
-    throw Error('The API response format is not supported, it must be a JSON');
+    throw Error("The API response format is not supported, it must be a JSON");
   });
 
   const jsonPathResult = jp.query(json, JSONPath);
@@ -40,8 +33,8 @@ const apiCall = async (rawParams) => {
       `JSONPath selector "${JSONPath}" returned empty result, it must return a single value:\n${JSON.stringify(
         jsonPathResult,
         null,
-        2,
-      )}`,
+        2
+      )}`
     );
   }
   if (jsonPathResult.length > 1) {
@@ -49,32 +42,32 @@ const apiCall = async (rawParams) => {
       `JSONPath selector "${JSONPath}" returned multiple results, it must return a single value:\n${JSON.stringify(
         jsonPathResult,
         null,
-        2,
-      )}`,
+        2
+      )}`
     );
   }
   const selected = jsonPathResult[0];
   const typeofSelected = typeof selected;
 
   switch (typeofSelected) {
-    case 'boolean':
-      if (dataType !== 'boolean') {
+    case "boolean":
+      if (dataType !== "boolean") {
         throw Error(
-          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "boolean"\` to store ${typeofSelected}`,
+          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "boolean"\` to store ${typeofSelected}`
         );
       }
       break;
-    case 'string':
-      if (dataType !== 'string') {
+    case "string":
+      if (dataType !== "string") {
         throw Error(
-          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "string"\` to store ${typeofSelected}`,
+          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "string"\` to store ${typeofSelected}`
         );
       }
       break;
-    case 'number':
-      if (dataType !== 'number') {
+    case "number":
+      if (dataType !== "number") {
         throw Error(
-          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "number"\` to store ${typeofSelected}`,
+          `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, wich is NOT compatible with \`dataType: "${dataType}"\`,  use \`dataType: "number"\` to store ${typeofSelected}`
         );
       }
       break;
@@ -83,11 +76,11 @@ const apiCall = async (rawParams) => {
         `JSONPath selector "${JSONPath}" returned a ${typeofSelected}, it must be string, number or boolean:\n${JSON.stringify(
           selected,
           null,
-          2,
-        )}`,
+          2
+        )}`
       );
   }
-  const date = Math.floor((new Date(res.headers.get('date'))).getTime() / 1000);
+  const date = Math.floor(new Date(res.headers.get("date")).getTime() / 1000);
 
   return { value: selected, date };
 };

@@ -47,6 +47,20 @@ The dataset itself should be a JSON with two fields :
 
 To run the tests do `npm i` as sual then run `npm test`
 
+For having all tests as successful, add a `.env` symlink at the root folder of the project pointing somewhere on your host:
+`.env -> .env-oracle-itest`
+```
+INFURA_PROJECT_ID=
+INFURA_PROJECT_SECRET=
+TARGET_PRIVATE_KEY=
+```
+
+## Build native image
+
+```
+docker image build -f docker/Dockerfile -t generic-oracle-dapp:local .
+```
+
 ## Build TEE debug image
 
 Prerequisites:
@@ -57,5 +71,33 @@ Prerequisites:
 - SCONE build tools for iExec
 
 ```
-npm run build
+npm run scone
+```
+
+## Test Dapp on live network
+
+
+### As app developer: create app and set secrets
+```
+iexec app deploy --chain bellecour
+```
+
+```
+iexec-core-cli app push-owner-secret --secret=$MY_SECRETS --sms=<sms_url> --wallet-path=/tmp/wallet.json --wallet-password
+```
+
+```
+iexec order sign --app --chain bellecour
+```
+
+### As requester: trigger crosschain app
+
+```
+iexec order sign --request --chain bellecour
+```
+```
+iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour
+```
+```
+iexec order fill --chain bellecour --workerpool <order>
 ```

@@ -1,7 +1,17 @@
-// Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
-@Library('jenkins-library@1.0.4') _
+@Library('global-jenkins-library@2.0.0') _
 
-def nativeImage = buildSimpleDocker_v2(dockerfileDir: './docker', buildContext: '.',
-        dockerImageRepositoryName: 'generic-oracle-dapp', imageprivacy: 'public')
-sconeBuildAllTee(nativeImage: nativeImage, targetImageRepositoryName: 'generic-oracle-dapp',
-        sconifyArgsPath: './docker/sconify.args')
+appName = 'generic-oracle-dapp'
+buildInfo = getBuildInfo()
+
+buildSimpleDocker_v3(
+        buildInfo : buildInfo,
+        dockerfileDir: './docker',
+        dockerImageRepositoryName: appName,
+        visibility: 'iex.ec')
+
+sconeBuildAllTee(
+        imageRegistry: 'docker-regis.iex.ec',
+        imageName: appName,
+        imageTag: buildInfo.imageTag,
+        sconifyArgsPath: './docker/sconify.args',
+        sconifyVersion: '5.3.15')
