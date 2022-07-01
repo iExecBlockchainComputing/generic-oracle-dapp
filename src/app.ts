@@ -5,6 +5,7 @@ import dapp from "./dapp";
 dapp()
   .then(async (callbackData) => {
     // Declare everything is computed
+    // Produce callback data as often as possible
     const computedJsonObj = {
       "callback-data":
         callbackData != undefined ? callbackData : ethers.constants.HashZero,
@@ -14,13 +15,6 @@ dapp()
       `${outputRoot}/computed.json`,
       JSON.stringify(computedJsonObj)
     );
-
-    // exit gracefully
-    if (callbackData != undefined) {
-      process.exitCode = 0;
-    } else {
-      process.exitCode = 1;
-    }
   })
   .catch((e) => {
     console.error("Unexpected error in dapp [e:%s]", e);

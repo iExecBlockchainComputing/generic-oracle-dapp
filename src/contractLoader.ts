@@ -47,7 +47,7 @@ export function loadClassicOracle(
   });
 
   const wallet = new ethers.Wallet(targetPrivateKey, provider);
-  console.log("Target reporter wallet address: " + wallet.address); //0x767A2D69D7278F200ae1F79a00Ac2CaE299dD784
+  console.log("Target reporter wallet address: " + wallet.address);
 
   return new ClassicOracle__factory().attach(oracleReceiver).connect(wallet);
 }
