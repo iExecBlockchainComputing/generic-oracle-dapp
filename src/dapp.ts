@@ -1,6 +1,6 @@
 import fsPromises from "fs/promises";
 import utils from "./utils";
-import { loadClassicOracle } from "../src/contractLoader";
+import { getWalletOnProvider } from "../src/contractLoader";
 import { apiCall } from "./caller";
 import { jsonParamSetSchema } from "./validators";
 import {
@@ -9,13 +9,27 @@ import {
   extractApiKey,
 } from "./requestConsistency";
 import { encodeValue } from "./resultEncoder";
-import { ethers } from "ethers";
+import { ethers, Wallet } from "ethers";
+import {
+  ClassicOracle,
+  ClassicOracle__factory,
+} from "@iexec/generic-oracle-contracts/typechain";
+import fetch from "node-fetch";
+
+const forwarderAddress = "0xc83de370A0D1C99F3D3D9e77bd930520ded81fFA";
+const oracleReceiver = "0x8Ad317241854b1A29A06cE5478e6B92FA09Cd03a";
+const forwarderApiUrl = "http://localhost:3000";
+//TODO: Check input params
+const chainId = 5; //goerli
 
 const start = async () => {
-  let classicOracle;
+  let wallet: Wallet;
   try {
     // validate args or exit before going further
-    classicOracle = loadClassicOracle(process.env.IEXEC_APP_DEVELOPER_SECRET);
+    wallet = getWalletOnProvider(
+      chainId,
+      process.env.IEXEC_APP_DEVELOPER_SECRET
+    );
   } catch (e) {
     console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
     return undefined;
@@ -82,32 +96,113 @@ const start = async () => {
     return undefined;
   }
 
-  try {
-    const tx = await classicOracle.receiveResult(oracleId, encodedValue);
-    console.log(
-      "Sent transaction to targeted oracle [tx:%s, oracleId:%s, encodedValue:%s]",
-      tx.hash,
-      oracleId,
-      encodedValue
-    );
-    return tx
-      .wait()
-      .then((receipt) => {
-        console.log(
-          "Mined transaction for targeted oracle [tx:%s, blockNumber:%s, oracleId:%s]",
-          tx.hash,
-          receipt.blockNumber,
-          oracleId
-        );
-        return encodedValue;
-      })
-      .catch((e) => {
-        console.error("Failed transaction on targeted oracle [e:%s]", e);
-        return undefined;
-      });
-  } catch (e) {
-    console.error("Failed to send transaction [e:%s]", e);
-    return undefined;
+  const signedForwardRequest = await getSignedForwardRequest(
+    wallet,
+    oracleId,
+    encodedValue
+  );
+
+  const multiForwardRequest = {
+    requests: [signedForwardRequest],
+  };
+
+  console.log(JSON.stringify(multiForwardRequest));
+
+  if (await postMultiForwardRequest(multiForwardRequest, oracleId)) {
+    return encodedValue;
   }
+  return undefined;
 };
 export default start;
+
+async function postMultiForwardRequest(
+  multiForwardRequest: any, //TODO: Update to explciti type
+  oracleId: string
+): Promise<boolean> {
+  const response = await fetch(forwarderApiUrl + "/forward", {
+    method: "post",
+    body: JSON.stringify(multiForwardRequest),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (response.ok) {
+    console.log(
+      "Successful response from Forwarder API [oracleId:%s, taskId:%s]",
+      oracleId,
+      oracleId
+    );
+    return true;
+  }
+  console.error(
+    "Failure response from Forwarder API [oracleId:%s, taskId:%s, error:%s, data:%s]",
+    oracleId,
+    oracleId,
+    response.status,
+    await response.json()
+  );
+  return false;
+}
+
+async function getSignedForwardRequest(
+  wallet: ethers.Wallet,
+  oracleId: string,
+  encodedValue: string
+) {
+  const reporterAddress = await wallet.getAddress();
+  const domain = {
+    name: "SaltyForwarder",
+    version: "0.0.1",
+    chainId: chainId.toString(),
+    verifyingContract: forwarderAddress,
+  };
+  const types = {
+    ForwardRequest: [
+      { name: "from", type: "address" },
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+      { name: "gas", type: "uint256" },
+      { name: "salt", type: "bytes32" },
+      { name: "data", type: "bytes" },
+    ],
+  };
+
+  const classicOracle = new ClassicOracle__factory()
+    .attach(oracleReceiver)
+    .connect(wallet);
+
+  const forwardRequest = {
+    from: reporterAddress,
+    to: oracleReceiver,
+    value: "0",
+    //TODO: Change to receiveResult(taskId, ..)
+    gas: (
+      await classicOracle.estimateGas.receiveResult(oracleId, encodedValue)
+    ).toString(),
+    salt: ethers.utils.keccak256(
+      ethers.utils.toUtf8Bytes(Math.random().toString())
+    ),
+    data: classicOracle.interface.encodeFunctionData("receiveResult", [
+      oracleId,
+      encodedValue,
+    ]),
+  };
+
+  const signature = await wallet._signTypedData(domain, types, forwardRequest);
+
+  const signedForwardRequest = {
+    eip712: {
+      types: types.ForwardRequest,
+      domain: domain,
+      message: forwardRequest,
+    },
+    sign: signature,
+  };
+  console.log(
+    "Signed forwardRequest [oracleId:%s, taskId:%s, encodedValue:%s, signedForwardRequest:%s]",
+    oracleId,
+    oracleId, //TODO: Use taskId
+    encodedValue,
+    JSON.stringify(signedForwardRequest)
+  );
+  return signedForwardRequest;
+}

@@ -1,27 +1,27 @@
-import { loadClassicOracle } from "../src/contractLoader";
+import { getWalletOnProvider } from "../src/contractLoader";
 
 describe("contract loader", () => {
   test("should fail since no args", () => {
     expect(() => {
-      loadClassicOracle(undefined);
+      getWalletOnProvider(undefined);
     }).toThrowError("Encoded args are required");
   });
 
   test("should fail since empty args", () => {
     expect(() => {
-      loadClassicOracle("");
+      getWalletOnProvider("");
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
   test("should fail since parse payload failed", () => {
     expect(() => {
-      loadClassicOracle(JSON.stringify({ some: "data" }));
+      getWalletOnProvider(JSON.stringify({ some: "data" }));
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
   test("should fail since no infuraProjectId", () => {
     expect(() => {
-      loadClassicOracle(encode({}));
+      getWalletOnProvider(encode({}));
     }).toThrowError(
       "Failed to parse `infuraProjectId` from decoded secret JSON"
     );
@@ -29,7 +29,7 @@ describe("contract loader", () => {
 
   test("should fail since no infuraProjectSecret", () => {
     expect(() => {
-      loadClassicOracle(
+      getWalletOnProvider(
         encode({
           infuraProjectId: "id",
         })
@@ -41,7 +41,7 @@ describe("contract loader", () => {
 
   test("should fail since no targetPrivateKey", () => {
     expect(() => {
-      loadClassicOracle(
+      getWalletOnProvider(
         encode({
           infuraProjectId: "id",
           infuraProjectSecret: "secret",
@@ -54,7 +54,7 @@ describe("contract loader", () => {
 
   test("should return something", () => {
     expect(
-      loadClassicOracle(
+      getWalletOnProvider(
         encode({
           infuraProjectId: "some",
           infuraProjectSecret: "secret",
