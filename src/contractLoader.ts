@@ -4,15 +4,11 @@ import {
   ClassicOracle__factory,
 } from "@iexec/generic-oracle-contracts/typechain";
 
-const chain = "goerli";
-const oracleReceiver = "0x28291E6A81aC30cE6099144E68D8aEeE2b64052b";
-
 export function getWalletOnProvider(
   chainId: number,
   encodedArgs: string | undefined
 ): Wallet {
-  console.log("Target chain: " + chain);
-  console.log("Target oracle address: " + oracleReceiver);
+  console.log("Target chain: " + chainId);
 
   if (encodedArgs == undefined) {
     throw Error("Encoded args are required");
