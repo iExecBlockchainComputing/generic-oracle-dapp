@@ -1,6 +1,5 @@
 import fsPromises from "fs/promises";
 import utils from "./utils";
-import { getWalletOnProvider } from "../src/contractLoader";
 import { apiCall } from "./caller";
 import { jsonParamSetSchema } from "./validators";
 import {
@@ -9,21 +8,8 @@ import {
   extractApiKey,
 } from "./requestConsistency";
 import { encodeValue } from "./resultEncoder";
-import { ethers, Wallet } from "ethers";
-import { getSignedForwardRequest } from "./getSignedForwardRequest";
-import { postMultiForwardRequest } from "./postMultiForwardRequest";
-
-export const forwarderApiUrl = "http://localhost:3000";
-// Goerli
-export const goerliForwarderAddress =
-  "0xc83de370A0D1C99F3D3D9e77bd930520ded81fFA";
-export const goerliOracleReceiver =
-  "0x8Ad317241854b1A29A06cE5478e6B92FA09Cd03a";
-export const supportedTargetChainIds = [
-  5, // goerli
-];
-const supportedTargetChainId = supportedTargetChainIds[0];
-//TODO: Use same structure for things related to a chain
+import { ethers } from "ethers";
+import { triggerMultiFowardRequest } from "./forward/forwardHandler";
 
 const start = async () => {
   const inputFolder = process.env.IEXEC_IN;
@@ -90,12 +76,15 @@ const start = async () => {
 
   // `node app.ts bla` (0, 1, 2)
   console.log(process.argv);
-  if (
-    process.argv.length > 2 &&
-    Number(process.argv[4]) == supportedTargetChainId //TODO: Only works in tests, update to 2
-  ) {
+  const requestedChainIds =
+    process.argv.length > 2
+      ? // Parse chainIds, sort them, remove duplicates, cast them from string to number
+        Array.from(new Set(process.argv[4].split(",").sort()), Number) //TODO: Only works in tests, update to 2
+      : undefined;
+  if (requestedChainIds) {
+    console.log("Crosschain requested [chains:%s]", requestedChainIds);
     const isCrossChainRequestSent = await triggerMultiFowardRequest(
-      supportedTargetChainId,
+      requestedChainIds,
       oracleId,
       encodedValue
     );
@@ -108,40 +97,3 @@ const start = async () => {
   return encodedValue;
 };
 export default start;
-
-async function triggerMultiFowardRequest(
-  targetChainId: number,
-  oracleId: string,
-  encodedValue: string
-) {
-  const taskId = process.env.IEXEC_TASK_ID;
-  if (taskId == undefined) {
-    console.error("[IEXEC] IEXEC_TASK_ID is missing");
-    return false;
-  }
-  let wallet: Wallet;
-  try {
-    // validate args or exit before going further
-    wallet = getWalletOnProvider(
-      targetChainId,
-      process.env.IEXEC_APP_DEVELOPER_SECRET
-    );
-  } catch (e) {
-    console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
-    return false;
-  }
-  const signedForwardRequest = await getSignedForwardRequest(
-    wallet,
-    taskId,
-    oracleId,
-    encodedValue
-  );
-
-  const multiForwardRequest = {
-    requests: [signedForwardRequest],
-  };
-
-  console.log(JSON.stringify(multiForwardRequest));
-
-  return await postMultiForwardRequest(multiForwardRequest, oracleId, taskId);
-}

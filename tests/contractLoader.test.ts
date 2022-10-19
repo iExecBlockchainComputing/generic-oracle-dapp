@@ -1,27 +1,27 @@
-import { getWalletOnProvider } from "../src/contractLoader";
+import { getWalletWithProvider } from "../src/forward/walletLoader";
 
 describe("contract loader", () => {
   test("should fail since no args", () => {
     expect(() => {
-      getWalletOnProvider(undefined);
+      getWalletWithProvider(undefined);
     }).toThrowError("Encoded args are required");
   });
 
   test("should fail since empty args", () => {
     expect(() => {
-      getWalletOnProvider("");
+      getWalletWithProvider("");
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
   test("should fail since parse payload failed", () => {
     expect(() => {
-      getWalletOnProvider(JSON.stringify({ some: "data" }));
+      getWalletWithProvider(JSON.stringify({ some: "data" }));
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
   test("should fail since no infuraProjectId", () => {
     expect(() => {
-      getWalletOnProvider(encode({}));
+      getWalletWithProvider(encode({}));
     }).toThrowError(
       "Failed to parse `infuraProjectId` from decoded secret JSON"
     );
@@ -29,7 +29,7 @@ describe("contract loader", () => {
 
   test("should fail since no infuraProjectSecret", () => {
     expect(() => {
-      getWalletOnProvider(
+      getWalletWithProvider(
         encode({
           infuraProjectId: "id",
         })
@@ -41,7 +41,7 @@ describe("contract loader", () => {
 
   test("should fail since no targetPrivateKey", () => {
     expect(() => {
-      getWalletOnProvider(
+      getWalletWithProvider(
         encode({
           infuraProjectId: "id",
           infuraProjectSecret: "secret",
@@ -54,7 +54,7 @@ describe("contract loader", () => {
 
   test("should return something", () => {
     expect(
-      getWalletOnProvider(
+      getWalletWithProvider(
         encode({
           infuraProjectId: "some",
           infuraProjectSecret: "secret",

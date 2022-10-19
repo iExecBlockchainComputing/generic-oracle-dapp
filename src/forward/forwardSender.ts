@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { forwarderApiUrl } from "./dapp";
+import { forwarderApiUrl } from "./forwardEnvironment";
 
 export async function postMultiForwardRequest(
   multiForwardRequest: any,

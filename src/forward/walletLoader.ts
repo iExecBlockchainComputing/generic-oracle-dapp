@@ -1,12 +1,9 @@
 import { ethers, Wallet } from "ethers";
-import {
-  ClassicOracle,
-  ClassicOracle__factory,
-} from "@iexec/generic-oracle-contracts/typechain";
 
-export function getWalletOnProvider(
+export function getWalletWithProvider(
   chainId: number,
-  encodedArgs: string | undefined
+  encodedArgs: string | undefined,
+  providerUrl: string | undefined
 ): Wallet {
   console.log("Target chain: " + chainId);
 
@@ -39,16 +36,22 @@ export function getWalletOnProvider(
     throw Error("Failed to parse `targetPrivateKey` from decoded secret JSON");
   }
 
+  //TODO: Remove if default provider is fine
   //   const provider = new ethers.providers.InfuraProvider(chain, {
   //     projectId: infuraProjectId,
   //     projectSecret: infuraProjectSecret,
   //   });
-  const provider = ethers.getDefaultProvider(chainId);
+
+  let provider;
+  if (providerUrl) {
+    provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  } else {
+    provider = ethers.getDefaultProvider(chainId);
+  }
 
   const wallet = new ethers.Wallet(targetPrivateKey, provider);
   console.log("Target reporter wallet address: " + wallet.address);
 
-  //return new ClassicOracle__factory().attach(oracleReceiver).connect(wallet);
   return wallet;
 }
 

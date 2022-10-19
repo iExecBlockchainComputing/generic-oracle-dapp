@@ -1,19 +1,21 @@
 import { ethers } from "ethers";
 import { ClassicOracle__factory } from "@iexec/generic-oracle-contracts/typechain";
-import { goerliForwarderAddress, goerliOracleReceiver } from "./dapp";
+import { OnChainConfig } from "./forwardEnvironment";
 
 export async function getSignedForwardRequest(
   wallet: ethers.Wallet,
   taskId: string,
   oracleId: string,
-  encodedValue: string
+  encodedValue: string,
+  envAddresses: OnChainConfig
 ) {
+  const chainId = (await wallet.getChainId()).toString(); //Use id from arg instead?
   const reporterAddress = await wallet.getAddress();
   const domain = {
     name: "SaltyForwarder",
     version: "0.0.1",
-    chainId: (await wallet.getChainId()).toString(), //Use id from arg instead?
-    verifyingContract: goerliForwarderAddress,
+    chainId: chainId,
+    verifyingContract: envAddresses.forwarder,
   };
   const types = {
     ForwardRequest: [
@@ -26,15 +28,15 @@ export async function getSignedForwardRequest(
     ],
   };
 
-  console.log("Target oracle address: " + goerliOracleReceiver);
+  const oracleAddress = envAddresses.oracle;
 
   const classicOracle = new ClassicOracle__factory()
-    .attach(goerliOracleReceiver)
+    .attach(oracleAddress)
     .connect(wallet);
 
   const forwardRequest = {
     from: reporterAddress,
-    to: goerliOracleReceiver,
+    to: oracleAddress,
     value: "0",
     gas: (
       await classicOracle.estimateGas.receiveResult(taskId, encodedValue)
@@ -59,7 +61,8 @@ export async function getSignedForwardRequest(
     sign: signature,
   };
   console.log(
-    "Signed forwardRequest [oracleId:%s, taskId:%s, encodedValue:%s, signedForwardRequest:%s]",
+    "Signed forwardRequest [chainId:%s, oracleId:%s, taskId:%s, encodedValue:%s, signedForwardRequest:%s]",
+    chainId,
     oracleId,
     taskId,
     encodedValue,
