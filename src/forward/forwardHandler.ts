@@ -1,8 +1,8 @@
 import { getWalletWithProvider } from "./walletLoader";
 import { Wallet } from "ethers";
+import { getOnChainConfig } from "./forwardEnvironment";
 import { getSignedForwardRequest } from "./forwardSigner";
 import { postMultiForwardRequest } from "./forwardSender";
-import { getOnChainConfig } from "./forwardEnvironment";
 
 export async function triggerMultiFowardRequest(
   requestedChainIds: number[],
@@ -10,7 +10,7 @@ export async function triggerMultiFowardRequest(
   encodedValue: string
 ) {
   const taskId = process.env.IEXEC_TASK_ID;
-  if (taskId == undefined) {
+  if (!taskId) {
     console.error("[IEXEC] IEXEC_TASK_ID is missing");
     return false;
   }
@@ -58,7 +58,10 @@ export async function triggerMultiFowardRequest(
     requests: signedForwardRequests,
   };
 
-  console.log(JSON.stringify(multiForwardRequest));
+  console.log(
+    "Multi foward request ready [request:%s]",
+    JSON.stringify(multiForwardRequest)
+  );
 
   return await postMultiForwardRequest(multiForwardRequest, oracleId, taskId);
 }

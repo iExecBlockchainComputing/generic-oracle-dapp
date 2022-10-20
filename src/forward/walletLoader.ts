@@ -36,7 +36,6 @@ export function getWalletWithProvider(
     throw Error("Failed to parse `targetPrivateKey` from decoded secret JSON");
   }
 
-  //TODO: Remove if default provider is fine
   //   const provider = new ethers.providers.InfuraProvider(chain, {
   //     projectId: infuraProjectId,
   //     projectSecret: infuraProjectSecret,
