@@ -1,6 +1,6 @@
 import { Wallet } from "ethers";
-import { triggerMultiFowardRequest } from "../../src/forward/forwardHandler";
-import { getWalletWithProvider } from "../../src/forward/walletLoader";
+import { triggerMultiForwardRequest } from "../../src/forward/forwardHandler";
+import { loadWallet } from "../../src/forward/walletLoader";
 import { getSignedForwardRequest } from "../../src/forward/forwardSigner";
 import { postMultiForwardRequest } from "../../src/forward/forwardSender";
 
@@ -8,9 +8,7 @@ jest.mock("../../src/forward/walletLoader");
 jest.mock("../../src/forward/forwardSigner");
 jest.mock("../../src/forward/forwardSender");
 
-const getWalletWithProviderMock = getWalletWithProvider as jest.MockedFunction<
-  typeof getWalletWithProvider
->;
+const loadWalletMock = loadWallet as jest.MockedFunction<typeof loadWallet>;
 const getSignedForwardRequestMock =
   getSignedForwardRequest as jest.MockedFunction<
     typeof getSignedForwardRequest
@@ -37,7 +35,7 @@ describe("Forward handler", () => {
   test("should not trigger since task ID missing", async () => {
     process.env.IEXEC_TASK_ID = "";
 
-    const success = await triggerMultiFowardRequest(
+    const success = await triggerMultiForwardRequest(
       [CHAIN_ID],
       ORACLE_ID,
       VALUE
@@ -48,7 +46,7 @@ describe("Forward handler", () => {
   test("should not trigger since chain not supported", async () => {
     process.env.IEXEC_TASK_ID = TASK_ID;
 
-    const success = await triggerMultiFowardRequest(
+    const success = await triggerMultiForwardRequest(
       [12345], // chain not supported
       ORACLE_ID,
       VALUE
@@ -59,11 +57,11 @@ describe("Forward handler", () => {
   test("should not trigger since wallet not found", async () => {
     process.env.IEXEC_TASK_ID = TASK_ID;
 
-    getWalletWithProviderMock.mockImplementation(() => {
+    loadWalletMock.mockImplementation(() => {
       throw new Error("Wallet error");
     });
 
-    const success = await triggerMultiFowardRequest(
+    const success = await triggerMultiForwardRequest(
       [CHAIN_ID],
       ORACLE_ID,
       VALUE
@@ -74,7 +72,7 @@ describe("Forward handler", () => {
   test("should trigger", async () => {
     process.env.IEXEC_TASK_ID = TASK_ID;
 
-    getWalletWithProviderMock.mockReturnValue(wallet);
+    loadWalletMock.mockReturnValue(wallet);
     getSignedForwardRequestMock.mockReturnValue(
       Promise.resolve({
         eip712: {
@@ -99,7 +97,7 @@ describe("Forward handler", () => {
     );
     postMultiForwardRequestMock.mockReturnValue(Promise.resolve(true));
 
-    const success = await triggerMultiFowardRequest(
+    const success = await triggerMultiForwardRequest(
       [CHAIN_ID],
       ORACLE_ID,
       VALUE

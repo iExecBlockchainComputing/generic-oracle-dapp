@@ -4,7 +4,7 @@ import { getOnChainConfig } from "./forwardEnvironment";
 import { getSignedForwardRequest } from "./forwardSigner";
 import { postMultiForwardRequest } from "./forwardSender";
 
-export async function triggerMultiFowardRequest(
+export async function triggerMultiForwardRequest(
   requestedChainIds: number[],
   oracleId: string,
   encodedValue: string
@@ -56,7 +56,7 @@ export async function triggerMultiFowardRequest(
   };
 
   console.log(
-    "Multi foward request ready [request:%s]",
+    "Multi forward request ready [request:%s]",
     JSON.stringify(multiForwardRequest)
   );
 
