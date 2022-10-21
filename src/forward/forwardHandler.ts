@@ -1,4 +1,4 @@
-import { getWalletWithProvider } from "./walletLoader";
+import { loadWallet } from "./walletLoader";
 import { Wallet } from "ethers";
 import { getOnChainConfig } from "./forwardEnvironment";
 import { getSignedForwardRequest } from "./forwardSigner";
@@ -29,17 +29,14 @@ export async function triggerMultiFowardRequest(
     let wallet: Wallet;
     try {
       // validate args or exit before going further
-      wallet = getWalletWithProvider(
-        chainId,
-        process.env.IEXEC_APP_DEVELOPER_SECRET,
-        onChainConfig.providerUrl
-      );
+      wallet = loadWallet(process.env.IEXEC_APP_DEVELOPER_SECRET);
     } catch (e) {
       console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
       continue;
     }
 
     const signedForwardRequest = await getSignedForwardRequest(
+      chainId,
       wallet,
       taskId,
       oracleId,

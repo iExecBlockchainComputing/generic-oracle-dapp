@@ -1,12 +1,6 @@
 import { ethers, Wallet } from "ethers";
 
-export function getWalletWithProvider(
-  chainId: number,
-  encodedArgs: string | undefined,
-  providerUrl: string | undefined
-): Wallet {
-  console.log("Target chain: " + chainId);
-
+export function loadWallet(encodedArgs: string | undefined): Wallet {
   if (encodedArgs == undefined) {
     throw Error("Encoded args are required");
   }
@@ -41,14 +35,7 @@ export function getWalletWithProvider(
   //     projectSecret: infuraProjectSecret,
   //   });
 
-  let provider;
-  if (providerUrl) {
-    provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  } else {
-    provider = ethers.getDefaultProvider(chainId);
-  }
-
-  const wallet = new ethers.Wallet(targetPrivateKey, provider);
+  const wallet = new ethers.Wallet(targetPrivateKey);
   console.log("Target reporter wallet address: " + wallet.address);
 
   return wallet;
