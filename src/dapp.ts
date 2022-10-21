@@ -74,12 +74,11 @@ const start = async () => {
     return undefined;
   }
 
-  // `node app.ts bla` (0, 1, 2)
-  console.log(process.argv);
+  // Native command line arguments - 0:node, 1:app.ts, 2:arg1
   const requestedChainIds =
     process.argv.length > 2
       ? // Parse chainIds, sort them, remove duplicates, cast them from string to number
-        Array.from(new Set(process.argv[4].split(",").sort()), Number) //TODO: Only works in tests, update to 2
+        Array.from(new Set(process.argv[2].split(",").sort()), Number)
       : undefined;
   if (requestedChainIds) {
     console.log("Crosschain requested [chains:%s]", requestedChainIds);

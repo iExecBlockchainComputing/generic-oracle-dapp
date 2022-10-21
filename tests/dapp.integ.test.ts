@@ -32,7 +32,7 @@ describe("dapp", () => {
 
   test("a full successful dapp IT run without dataset", async () => {
     dotEnvConfig();
-    process.argv.push("5,80001"); // Goerli & Mumbai Polygon
+    process.argv = ["", "", "5,80001"]; // Goerli & Mumbai Polygon
     process.env.IEXEC_TASK_ID =
       "0x0000000000000000000000000000000000000000000000000000000000000abc";
     process.env.IEXEC_APP_DEVELOPER_SECRET =
