@@ -1,4 +1,4 @@
-export const forwarderApiUrl = "http://localhost:3000";
+export const forwarderApiUrl = "http://localhost:5000";
 
 const chainIdToOnChainConfig: Record<number, OnChainConfig> = {
   // Goerli

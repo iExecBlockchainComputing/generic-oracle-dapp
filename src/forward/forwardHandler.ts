@@ -4,7 +4,7 @@ import { getOnChainConfig } from "./forwardEnvironment";
 import { getSignedForwardRequest } from "./forwardSigner";
 import { postMultiForwardRequest } from "./forwardSender";
 
-export async function triggerMultiForwardRequest(
+export async function triggerForwardRequests(
   requestedChainIds: number[],
   oracleId: string,
   encodedValue: string
@@ -15,58 +15,44 @@ export async function triggerMultiForwardRequest(
     return false;
   }
 
-  const chainIds = requestedChainIds.filter(isSupportedChain);
-  const signedForwardRequests = [];
+  const successes = await Promise.all(
+    requestedChainIds.map(async (chainId) => {
+      const onChainConfig = getOnChainConfig(chainId);
+      if (!onChainConfig) {
+        console.error("Chain not supported [chainId:%s]", chainId);
+        return false;
+      }
 
-  for (const chainId of chainIds) {
-    const onChainConfig = getOnChainConfig(chainId);
-    if (!onChainConfig) {
-      // already checked, should not happen
-      console.error("Chain not supported [chainId:%s]", chainId);
-      continue;
-    }
+      let wallet: Wallet;
+      try {
+        // validate args or exit before going further
+        wallet = loadWallet(process.env.IEXEC_APP_DEVELOPER_SECRET);
+      } catch (e) {
+        console.error(
+          "Failed to load ClassicOracle from encoded args [e:%s]",
+          e
+        );
+        return false;
+      }
 
-    let wallet: Wallet;
-    try {
-      // validate args or exit before going further
-      wallet = loadWallet(process.env.IEXEC_APP_DEVELOPER_SECRET);
-    } catch (e) {
-      console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
-      continue;
-    }
+      const signedForwardRequest = await getSignedForwardRequest(
+        chainId,
+        wallet,
+        taskId,
+        oracleId,
+        encodedValue,
+        onChainConfig
+      );
 
-    const signedForwardRequest = await getSignedForwardRequest(
-      chainId,
-      wallet,
-      taskId,
-      oracleId,
-      encodedValue,
-      onChainConfig
-    );
-
-    signedForwardRequests.push(signedForwardRequest);
-  }
-
-  if (signedForwardRequests.length == 0) {
-    return false;
-  }
-
-  const multiForwardRequest = {
-    requests: signedForwardRequests,
-  };
-
-  console.log(
-    "Multi forward request ready [request:%s]",
-    JSON.stringify(multiForwardRequest)
+      return await postMultiForwardRequest(
+        signedForwardRequest,
+        oracleId,
+        taskId
+      );
+    })
   );
 
-  return await postMultiForwardRequest(multiForwardRequest, oracleId, taskId);
-}
-
-function isSupportedChain(chainId: number) {
-  if (getOnChainConfig(chainId) != undefined) {
-    return true;
-  }
-  console.error("Chain not supported [chainId:%s]", chainId);
-  return false;
+  return (
+    successes.filter((success) => success).length == requestedChainIds.length
+  );
 }

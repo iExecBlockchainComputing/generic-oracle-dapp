@@ -2,13 +2,14 @@ import fetch from "node-fetch";
 import { forwarderApiUrl } from "./forwardEnvironment";
 
 export async function postMultiForwardRequest(
-  multiForwardRequest: any,
+  signedForwardRequest: any,
   oracleId: string,
   taskId: string
 ): Promise<boolean> {
+  console.log(signedForwardRequest);
   const response = await fetch(forwarderApiUrl + "/forward", {
     method: "post",
-    body: JSON.stringify(multiForwardRequest),
+    body: JSON.stringify(signedForwardRequest),
     headers: { "Content-Type": "application/json" },
   });
 
@@ -25,7 +26,7 @@ export async function postMultiForwardRequest(
     oracleId,
     taskId,
     response.status,
-    await response.json().then((aa) => console.log(aa.message))
+    await response.json().then((body) => console.log(body.message))
   );
   return false;
 }

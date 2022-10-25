@@ -9,7 +9,7 @@ import {
 } from "./requestConsistency";
 import { encodeValue } from "./resultEncoder";
 import { ethers } from "ethers";
-import { triggerMultiForwardRequest } from "./forward/forwardHandler";
+import { triggerForwardRequests } from "./forward/forwardHandler";
 
 const start = async () => {
   const inputFolder = process.env.IEXEC_IN;
@@ -82,7 +82,7 @@ const start = async () => {
       : undefined;
   if (requestedChainIds) {
     console.log("Crosschain requested [chains:%s]", requestedChainIds);
-    const isCrossChainRequestSent = await triggerMultiForwardRequest(
+    const isCrossChainRequestSent = await triggerForwardRequests(
       requestedChainIds,
       oracleId,
       encodedValue

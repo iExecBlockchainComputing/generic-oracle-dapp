@@ -1,5 +1,5 @@
 import { Wallet } from "ethers";
-import { triggerMultiForwardRequest } from "../../src/forward/forwardHandler";
+import { triggerForwardRequests } from "../../src/forward/forwardHandler";
 import { loadWallet } from "../../src/forward/walletLoader";
 import { getSignedForwardRequest } from "../../src/forward/forwardSigner";
 import { postMultiForwardRequest } from "../../src/forward/forwardSender";
@@ -35,23 +35,19 @@ describe("Forward handler", () => {
   test("should not trigger since task ID missing", async () => {
     process.env.IEXEC_TASK_ID = "";
 
-    const success = await triggerMultiForwardRequest(
-      [CHAIN_ID],
-      ORACLE_ID,
-      VALUE
-    );
-    expect(success).toBeFalsy();
+    const success = await triggerForwardRequests([CHAIN_ID], ORACLE_ID, VALUE);
+    expect(success).toBe(false);
   });
 
   test("should not trigger since chain not supported", async () => {
     process.env.IEXEC_TASK_ID = TASK_ID;
 
-    const success = await triggerMultiForwardRequest(
+    const success = await triggerForwardRequests(
       [12345], // chain not supported
       ORACLE_ID,
       VALUE
     );
-    expect(success).toBeFalsy();
+    expect(success).toBe(false);
   });
 
   test("should not trigger since wallet not found", async () => {
@@ -61,12 +57,8 @@ describe("Forward handler", () => {
       throw new Error("Wallet error");
     });
 
-    const success = await triggerMultiForwardRequest(
-      [CHAIN_ID],
-      ORACLE_ID,
-      VALUE
-    );
-    expect(success).toBeFalsy();
+    const success = await triggerForwardRequests([CHAIN_ID], ORACLE_ID, VALUE);
+    expect(success).toBe(false);
   });
 
   test("should trigger", async () => {
@@ -76,7 +68,7 @@ describe("Forward handler", () => {
     getSignedForwardRequestMock.mockReturnValue(
       Promise.resolve({
         eip712: {
-          types: [],
+          types: { ForwardRequest: [] },
           domain: {
             name: "string",
             version: "string",
@@ -97,11 +89,7 @@ describe("Forward handler", () => {
     );
     postMultiForwardRequestMock.mockReturnValue(Promise.resolve(true));
 
-    const success = await triggerMultiForwardRequest(
-      [CHAIN_ID],
-      ORACLE_ID,
-      VALUE
-    );
-    expect(success).toBeTruthy();
+    const success = await triggerForwardRequests([CHAIN_ID], ORACLE_ID, VALUE);
+    expect(success).toBe(true);
   });
 });

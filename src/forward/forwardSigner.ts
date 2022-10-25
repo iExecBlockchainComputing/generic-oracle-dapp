@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { ClassicOracle__factory } from "@iexec/generic-oracle-contracts/typechain";
 import { OnChainConfig } from "./forwardEnvironment";
+import { ReceiveResultContractFunction } from "./oracleContractWrapper";
 
 export async function getSignedForwardRequest(
   chainId: number,
@@ -38,33 +38,29 @@ export async function getSignedForwardRequest(
     provider = ethers.getDefaultProvider(chainId);
   }
 
-  const classicOracle = new ClassicOracle__factory()
-    .attach(oracleAddress)
-    .connect(provider);
+  const receiveResult = new ReceiveResultContractFunction(
+    oracleAddress,
+    provider
+  );
 
   const forwardRequest = {
     from: reporterAddress,
     to: oracleAddress,
     value: "0",
     gas: (
-      await classicOracle.estimateGas.receiveResult(taskId, encodedValue, {
-        from: reporterAddress,
-      })
+      await receiveResult.getGasEstimate(taskId, encodedValue, reporterAddress)
     ).toString(),
     salt: ethers.utils.keccak256(
       ethers.utils.toUtf8Bytes(Math.random().toString())
     ),
-    data: classicOracle.interface.encodeFunctionData("receiveResult", [
-      taskId,
-      encodedValue,
-    ]),
+    data: receiveResult.getData(taskId, encodedValue),
   };
 
   const signature = await wallet._signTypedData(domain, types, forwardRequest);
 
   const signedForwardRequest = {
     eip712: {
-      types: types.ForwardRequest,
+      types: types,
       domain: domain,
       message: forwardRequest,
     },
