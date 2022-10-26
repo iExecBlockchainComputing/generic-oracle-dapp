@@ -1,4 +1,7 @@
-export const forwarderApiUrl = "http://localhost:5000";
+// localhost
+//export const forwarderApiUrl = "http://localhost:5000";
+// dev.iex.ec
+export const forwarderApiUrl = "https://forwarder.dev-oracle-factory.iex.ec";
 
 const chainIdToOnChainConfig: Record<number, OnChainConfig> = {
   // Goerli
