@@ -39,7 +39,7 @@
     "test": "jest --coverage",
     "itest": "jest --coverage tests/dapp.integ.test.ts",
     "build": "tsc",
-    "scone": "bash sconify.sh"
+    "scone": "bash docker/sconify.sh"
   },
   "repository": {
     "type": "git",
