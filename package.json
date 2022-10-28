@@ -36,7 +36,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "test": "jest --coverage",
+    "test": "jest --coverage --testPathIgnorePatterns=\"dapp.integ\"",
     "itest": "jest --coverage tests/dapp.integ.test.ts",
     "build": "tsc",
     "scone": "bash docker/sconify.sh"
