@@ -6,7 +6,7 @@ docker.image('node:16-alpine').inside {
         sh '''
         npm ci
         npm run build
-        npm test
+        npm ci-test
         '''
         archiveArtifacts artifacts: 'coverage/'
     }
