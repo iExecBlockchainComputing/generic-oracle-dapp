@@ -14,7 +14,6 @@ export function loadWallet(encodedArgs: string | undefined): Wallet {
     throw Error("Failed to parse appDeveloperSecret JSON");
   }
 
-  //TODO: Remove infura keys at some point
   const infuraProjectId = appDeveloperSecretJson.infuraProjectId;
   if (infuraProjectId == undefined) {
     throw Error("Failed to parse `infuraProjectId` from decoded secret JSON");
@@ -30,10 +29,8 @@ export function loadWallet(encodedArgs: string | undefined): Wallet {
     throw Error("Failed to parse `targetPrivateKey` from decoded secret JSON");
   }
 
-  //   const provider = new ethers.providers.InfuraProvider(chain, {
-  //     projectId: infuraProjectId,
-  //     projectSecret: infuraProjectSecret,
-  //   });
+  //TODO: Remove infura keys at some point
+  //const provider = getProvider(chainId, infuraProjectId, infuraProjectSecret);
 
   const wallet = new ethers.Wallet(targetPrivateKey);
   console.log(
@@ -49,3 +46,14 @@ interface OracleArgs {
   infuraProjectSecret?: string;
   targetPrivateKey?: string;
 }
+
+// function getProvider(
+//   chainId: number,
+//   infuraProjectId: string,
+//   infuraProjectSecret: string
+// ) {
+//   return new ethers.providers.InfuraProvider(chainId, {
+//     projectId: infuraProjectId,
+//     projectSecret: infuraProjectSecret,
+//   });
+// }
