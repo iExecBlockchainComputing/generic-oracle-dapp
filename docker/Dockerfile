@@ -2,7 +2,6 @@ FROM node:14-alpine3.10 AS builder
 COPY package*.json tsconfig.json ./
 COPY src/ /src/
 RUN npm ci
-# Future note: Run unit tests automatically
 RUN npm run build
 # Copy generated *.js to /app so we can use them
 RUN cp -R app/src/* ./app
