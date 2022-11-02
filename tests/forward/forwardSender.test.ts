@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { postMultiForwardRequest } from "../../src/forward/forwardSender";
+import { postForwardRequest } from "../../src/forward/forwardSender";
 import { forwarderApiUrl } from "../../src/forward/forwardEnvironment";
 
 jest.mock("node-fetch");
@@ -18,7 +18,7 @@ describe("Forward signer", () => {
       ok: true,
     }));
 
-    await postMultiForwardRequest({ some: "request" }, ORACLE_ID, TASK_ID);
+    await postForwardRequest({ some: "request" }, ORACLE_ID, TASK_ID);
 
     expect(fetch).toHaveBeenCalledWith(forwarderApiUrl + "/forward", {
       method: "post",
@@ -38,7 +38,7 @@ describe("Forward signer", () => {
     }));
 
     expect(
-      await postMultiForwardRequest({ some: "request" }, ORACLE_ID, TASK_ID)
+      await postForwardRequest({ some: "request" }, ORACLE_ID, TASK_ID)
     ).toBe(false);
   });
 });

@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { OnChainConfig } from "./forwardEnvironment";
 import { ReceiveResultContractFunction } from "./oracleContractWrapper";
 
-export async function getSignedForwardRequest(
+export async function signForwardRequest(
   chainId: number,
   wallet: ethers.Wallet,
   taskId: string,
@@ -67,7 +67,7 @@ export async function getSignedForwardRequest(
     sign: signature,
   };
   console.log(
-    "Signed forwardRequest [chainId:%s, oracleId:%s, taskId:%s, encodedValue:%s, signedForwardRequest:%s]",
+    "Signed forward request [chainId:%s, oracleId:%s, taskId:%s, encodedValue:%s, signedForwardRequest:%s]",
     chainId,
     oracleId,
     taskId,

@@ -1,8 +1,8 @@
 import { loadWallet } from "./walletLoader";
 import { Wallet } from "ethers";
 import { getOnChainConfig } from "./forwardEnvironment";
-import { getSignedForwardRequest } from "./forwardSigner";
-import { postMultiForwardRequest } from "./forwardSender";
+import { signForwardRequest } from "./forwardSigner";
+import { postForwardRequest } from "./forwardSender";
 
 export async function triggerForwardRequests(
   requestedChainIds: number[],
@@ -11,7 +11,25 @@ export async function triggerForwardRequests(
 ) {
   const taskId = process.env.IEXEC_TASK_ID;
   if (!taskId) {
-    console.error("[IEXEC] IEXEC_TASK_ID is missing");
+    console.error(
+      "`IEXEC_TASK_ID` environnement variable is missing [oracleId:%s, requestedChainIds:%s]",
+      oracleId,
+      requestedChainIds
+    );
+    return false;
+  }
+
+  let wallet: Wallet;
+  try {
+    // validate args or exit before going further
+    wallet = loadWallet(process.env.IEXEC_APP_DEVELOPER_SECRET);
+  } catch (error) {
+    console.error(
+      "Failed to load wallet from `IEXEC_APP_DEVELOPER_SECRET` [oracleId:%s, taskId:%s, error:%s]",
+      oracleId,
+      taskId,
+      error
+    );
     return false;
   }
 
@@ -19,23 +37,16 @@ export async function triggerForwardRequests(
     requestedChainIds.map(async (chainId) => {
       const onChainConfig = getOnChainConfig(chainId);
       if (!onChainConfig) {
-        console.error("Chain not supported [chainId:%s]", chainId);
-        return false;
-      }
-
-      let wallet: Wallet;
-      try {
-        // validate args or exit before going further
-        wallet = loadWallet(process.env.IEXEC_APP_DEVELOPER_SECRET);
-      } catch (e) {
         console.error(
-          "Failed to load ClassicOracle from encoded args [e:%s]",
-          e
+          "Foreign blockchain requested is not supported [chainId:%s, oracleId:%s, taskId:%s]",
+          chainId,
+          oracleId,
+          taskId
         );
         return false;
       }
 
-      const signedForwardRequest = await getSignedForwardRequest(
+      const signedForwardRequest = await signForwardRequest(
         chainId,
         wallet,
         taskId,
@@ -44,11 +55,7 @@ export async function triggerForwardRequests(
         onChainConfig
       );
 
-      return await postMultiForwardRequest(
-        signedForwardRequest,
-        oracleId,
-        taskId
-      );
+      return await postForwardRequest(signedForwardRequest, oracleId, taskId);
     })
   );
 

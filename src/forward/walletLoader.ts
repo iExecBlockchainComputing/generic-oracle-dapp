@@ -36,7 +36,10 @@ export function loadWallet(encodedArgs: string | undefined): Wallet {
   //   });
 
   const wallet = new ethers.Wallet(targetPrivateKey);
-  console.log("Target reporter wallet address: " + wallet.address);
+  console.log(
+    "Recovered authorized reporter wallet for foreign oracle contract [address:%s]",
+    wallet.address
+  );
 
   return wallet;
 }

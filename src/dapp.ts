@@ -81,17 +81,21 @@ const start = async () => {
         Array.from(new Set(process.argv[2].split(",").sort()), Number)
       : undefined;
   if (requestedChainIds) {
-    console.log("Crosschain requested [chains:%s]", requestedChainIds);
-    const isCrossChainRequestSent = await triggerForwardRequests(
+    console.log(
+      "User requesting updates on foreign blockchains [chains:%s]",
+      requestedChainIds
+    );
+    const allForwardRequestsAccepted = await triggerForwardRequests(
       requestedChainIds,
       oracleId,
       encodedValue
     );
     // Status is logged for information purpose only (app must go on on failure)
-    console.log(
-      "isCrossChainRequestSent status [status:%s]",
-      isCrossChainRequestSent
-    );
+    if (allForwardRequestsAccepted) {
+      console.log("All forward requests accepted by Forwarder API");
+    } else {
+      console.error("At least one forward request rejected by Forwarder API");
+    }
   }
   return encodedValue;
 };

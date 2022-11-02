@@ -1,6 +1,6 @@
 import { ClassicOracle } from "@iexec/generic-oracle-contracts/typechain";
 import { Wallet, BigNumber } from "ethers";
-import { getSignedForwardRequest } from "../../src/forward/forwardSigner";
+import { signForwardRequest } from "../../src/forward/forwardSigner";
 import { ReceiveResultContractFunction } from "../../src/forward/oracleContractWrapper";
 
 jest.mock("../../src/forward/oracleContractWrapper");
@@ -32,7 +32,7 @@ describe("Forward signer", () => {
 
     jest.spyOn(Math, "random").mockReturnValue(123456789);
 
-    const signedRequest = await getSignedForwardRequest(
+    const signedRequest = await signForwardRequest(
       CHAIN_ID,
       wallet,
       TASK_ID,

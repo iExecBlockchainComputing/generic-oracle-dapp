@@ -1,8 +1,8 @@
 import { Wallet } from "ethers";
 import { triggerForwardRequests } from "../../src/forward/forwardHandler";
 import { loadWallet } from "../../src/forward/walletLoader";
-import { getSignedForwardRequest } from "../../src/forward/forwardSigner";
-import { postMultiForwardRequest } from "../../src/forward/forwardSender";
+import { signForwardRequest } from "../../src/forward/forwardSigner";
+import { postForwardRequest } from "../../src/forward/forwardSender";
 
 jest.mock("../../src/forward/walletLoader");
 jest.mock("../../src/forward/forwardSigner");
@@ -10,12 +10,12 @@ jest.mock("../../src/forward/forwardSender");
 
 const loadWalletMock = loadWallet as jest.MockedFunction<typeof loadWallet>;
 const getSignedForwardRequestMock =
-  getSignedForwardRequest as jest.MockedFunction<
-    typeof getSignedForwardRequest
+  signForwardRequest as jest.MockedFunction<
+    typeof signForwardRequest
   >;
 const postMultiForwardRequestMock =
-  postMultiForwardRequest as jest.MockedFunction<
-    typeof postMultiForwardRequest
+  postForwardRequest as jest.MockedFunction<
+    typeof postForwardRequest
   >;
 
 const TASK_ID =
