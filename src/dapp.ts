@@ -1,7 +1,7 @@
 import fsPromises from "fs/promises";
 import utils from "./utils";
 import { apiCall } from "./caller";
-import { jsonParamSetSchema } from "./validators";
+import { jsonParamSetSchema, targetChainsSchema } from "./validators";
 import {
   getInputFilePath,
   extractDataset,
@@ -75,11 +75,9 @@ const start = async () => {
   }
 
   // Native command line arguments - 0:node, 1:app.ts, 2:arg1
-  const requestedChainIds =
-    process.argv.length > 2
-      ? // Parse chainIds, sort them, remove duplicates, cast them from string to number
-        Array.from(new Set(process.argv[2].split(",").sort()), Number)
-      : undefined;
+  const requestedChainIds = await targetChainsSchema().validate(
+    process.argv[2]
+  );
   if (requestedChainIds) {
     console.log(
       "User requesting updates on foreign blockchains [chains:%s]",

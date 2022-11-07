@@ -1,5 +1,5 @@
 import { ClassicOracle } from "@iexec/generic-oracle-contracts/typechain";
-import { Wallet, BigNumber } from "ethers";
+import { Wallet, BigNumber, utils } from "ethers";
 import { signForwardRequest } from "../../src/forward/forwardSigner";
 import { ReceiveResultContractFunction } from "../../src/forward/oracleContractWrapper";
 
@@ -30,7 +30,9 @@ describe("Forward signer", () => {
       .mocked(ReceiveResultContractFunction)
       .mockImplementation(() => receiveResultMock);
 
-    jest.spyOn(Math, "random").mockReturnValue(123456789);
+    jest.spyOn(utils, "randomBytes").mockReturnValue(
+      utils.toUtf8Bytes("01234567890123456789012345678901") //size 32
+    );
 
     const signedRequest = await signForwardRequest(
       CHAIN_ID,
@@ -67,11 +69,11 @@ describe("Forward signer", () => {
           to: "0x0000000000000000000000000000000000000002",
           value: "0",
           gas: "100000",
-          salt: "0x2a359feeb8e488a1af2c03b908b3ed7990400555db73e1421181d97cac004d48",
+          salt: "0x3031323334353637383930313233343536373839303132333435363738393031",
           data: "0xabcd",
         },
       },
-      sign: "0x85457e9405fbe9a75a8604f4bd678ce8a5276215ea78cad77376b406f7a325f67efb764efd0d2d4a01b35a1eb2e47e90625a1f7056e5c3853068bca64e1b51e21c",
+      sign: "0xfa561b74cd3fc10cdee22beed8ede242d8da31c9e203e2ee1c34fe015cadc50603d93681ad71cd682ac4f8049633a78ceaafd92c69595d9c60402f54ad442fe91b",
     });
   });
 });

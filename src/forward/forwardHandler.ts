@@ -53,9 +53,14 @@ export async function triggerForwardRequests(
         oracleId,
         encodedValue,
         onChainConfig
-      );
+        // catch promise rejection and convert it to false to prevent Promise.all rejection
+      ).catch((e) => false);
 
-      return await postForwardRequest(signedForwardRequest, oracleId, taskId);
+      return await postForwardRequest(
+        signedForwardRequest,
+        oracleId,
+        taskId
+      ).catch((e) => false);
     })
   );
 

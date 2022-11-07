@@ -1,4 +1,4 @@
-const { string, object, array } = require("yup");
+const { string, number, object, array } = require("yup");
 const { getAddress } = require("ethers").utils;
 const jp = require("jsonpath");
 const { API_KEY_PLACEHOLDER } = require("./conf");
@@ -306,9 +306,18 @@ const jsonParamSetSchema = () =>
       }
     );
 
+const chainIdSchema = () => number().integer();
+
+// Parse chainIds, sort them, remove duplicates, cast them to number
+const targetChainsSchema = () =>
+  array()
+    .transform((value, originalValue) => Array.from(new Set(originalValue.split(',').sort())))
+    .of(chainIdSchema().required());
+
 module.exports = {
   rawParamsSchema,
   strictCallParamsSchema,
   strictParamSetSchema,
   jsonParamSetSchema,
+  targetChainsSchema
 };

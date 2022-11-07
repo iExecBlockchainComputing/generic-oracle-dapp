@@ -50,9 +50,7 @@ export async function signForwardRequest(
     gas: (
       await receiveResult.getGasEstimate(taskId, encodedValue, reporterAddress)
     ).toString(),
-    salt: ethers.utils.keccak256(
-      ethers.utils.toUtf8Bytes(Math.random().toString())
-    ),
+    salt: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
     data: receiveResult.getData(taskId, encodedValue),
   };
 
