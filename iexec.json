@@ -17,26 +17,26 @@
   },
   "app": {
     "owner": "0x15Bd06807eF0F2284a9C5baeAA2EF4d5a88eB72A",
-    "name": "generic-oracle-dapp-2",
+    "name": "generic-oracle-dapp-xc",
     "type": "DOCKER",
-    "multiaddr": "docker.io/iexechub/generic-oracle-dapp:feature-99feb9ab-sconify-5.3.15-debug",
-    "checksum": "0xd0d4c6828115d01ec5f4fd8350bd485f9f4b904050fdce7be77ab6655af11df4",
+    "multiaddr": "docker.io/iexechub/generic-oracle-dapp:feature-d0b90550-sconify-5.3.15-production",
+    "checksum": "0xf7485b254816519e4e49aaaa66e31a99877f3fd19feb2dfe880513b44bfe4fde",
     "mrenclave": {
       "provider": "SCONE",
       "version": "v5",
       "entrypoint": "node /app/app.js",
       "heapSize": 1073741824,
-      "fingerprint": "820fef5ec06be4bf1b49e463a0f4a6531254807d2d34b33c8e454f5ac46c8b2c"
+      "fingerprint": "0e485080518310768ebab8eff3600bb188fe9b669ce19092dde984ab7c900fad"
     }
   },
   "order": {
     "requestorder": {
-      "app": "0xa7E233a6648d77872005E7C4689B63DFbbDd8857",
+      "app": "0xdce234BF640235549D4D95C4764B1863FfDa7cF4",
       "appmaxprice": "0",
       "dataset": "0x0000000000000000000000000000000000000000",
       "datasetmaxprice": "0",
-      "workerpool": "0x09bc1b06A695Fa9d2A98AC336331872EA81F307D",
-      "workerpoolmaxprice": "10000000",
+      "workerpool": "0xEb14Dc854A8873e419183c81a657d025EC70276b",
+      "workerpoolmaxprice": "0",
       "volume": "1",
       "category": "0",
       "trust": "0",
@@ -44,9 +44,9 @@
       "beneficiary": "0x15Bd06807eF0F2284a9C5baeAA2EF4d5a88eB72A",
       "callback": "0x8ecEDdd1377E52d23A46E2bd3dF0aFE35B526D5F",
       "params": {
-        "iexec_args": "",
+        "iexec_args": "5,80001",
         "iexec_input_files": [
-          "https://raw.githubusercontent.com/iExecBlockchainComputing/generic-oracle-dapp/feature/goerli-crosschain/tests/test_files/input_file_no_dataset.json"
+          "https://raw.githubusercontent.com/iExecBlockchainComputing/generic-oracle-dapp/feature/metatxs-to-forwarder-api/tests/test_files/input_file_no_dataset.json"
         ],
         "iexec_result_encryption": false,
         "iexec_developer_logger": true
@@ -54,12 +54,12 @@
       "requester": "0x15Bd06807eF0F2284a9C5baeAA2EF4d5a88eB72A"
     },
     "apporder": {
-      "app": "0xa7E233a6648d77872005E7C4689B63DFbbDd8857",
+      "app": "0xdce234BF640235549D4D95C4764B1863FfDa7cF4",
       "appprice": "0",
-      "volume": "10",
+      "volume": "1000",
       "tag": "0x0000000000000000000000000000000000000000000000000000000000000001",
       "datasetrestrict": "0x0000000000000000000000000000000000000000",
-      "workerpoolrestrict": "0x0000000000000000000000000000000000000000",
+      "workerpoolrestrict": "0xEb14Dc854A8873e419183c81a657d025EC70276b",
       "requesterrestrict": "0x0000000000000000000000000000000000000000"
     }
   }

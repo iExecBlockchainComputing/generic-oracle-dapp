@@ -1,5 +1,16 @@
 @Library('global-jenkins-library@2.0.0') _
 
+docker.image('node:16-alpine').inside {
+    stage('Test') {
+        checkout scm
+        sh '''
+        npm ci
+        npm run ci-test
+        '''
+        archiveArtifacts artifacts: 'coverage/'
+    }
+}
+
 appName = 'generic-oracle-dapp'
 buildInfo = getBuildInfo()
 

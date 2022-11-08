@@ -85,6 +85,10 @@ iexec app deploy --chain bellecour
 ```
 iexec-core-cli app push-owner-secret --secret=$MY_SECRETS --sms=<sms_url> --wallet-path=/tmp/wallet.json --wallet-password
 ```
+or
+```
+iexec app push-secret --secret-value $MY_SECRETS <app_address> --chain bellecour
+```
 
 ```
 iexec order sign --app --chain bellecour
@@ -97,6 +101,7 @@ iexec order sign --request --chain bellecour
 ```
 ```
 iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour
+iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour --raw | jq -r .workerpoolOrders[0].orderHash
 ```
 ```
 iexec order fill --chain bellecour --workerpool <order>
