@@ -311,7 +311,8 @@ const chainIdSchema = () => number().integer();
 // Parse chainIds, sort them, remove duplicates, cast them to number
 const targetChainsSchema = () =>
   array()
-    .transform((value, originalValue) => Array.from(new Set(originalValue.split(',').sort())))
+    .transform((value, originalValue) => 
+        Array.from(new Set(originalValue.split(','))).sort((a, b) => a - b))
     .of(chainIdSchema().required());
 
 module.exports = {
