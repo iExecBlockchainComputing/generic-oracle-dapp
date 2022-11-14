@@ -1,0 +1,15 @@
+{
+    "forwarderApiUrl": "http://localhost:5000",
+    "onChainConfig": {
+        "5": {
+            "forwarder": "0x2aD6aD4F35cf7354fE703da74F459690dBcC12bf",
+            "oracle": "0x8dFf608952ADCDa4cF7320324Db1ef44001BE79b",
+            "providerUrl": ""
+        },
+        "80001": {
+            "forwarder": "0xa715674ecf9D14141421190b6f8Acf20686b54d7",
+            "oracle": "0x330031CF7e6E2C318Dba230fe25A7f39fD3644EA",
+            "providerUrl": "https://rpc-mumbai.maticvigil.com"
+        }
+    }
+}

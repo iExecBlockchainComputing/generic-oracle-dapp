@@ -58,7 +58,7 @@ TARGET_PRIVATE_KEY=
 ## Build native image
 
 ```
-docker image build -f docker/Dockerfile -t generic-oracle-dapp:local .
+docker image build -f docker/Dockerfile -t generic-oracle-dapp:local --build-arg CONFIG_FILE=config.prod.json .
 ```
 
 ## Build TEE debug image

@@ -5,6 +5,7 @@ docker.image('node:16-alpine').inside {
         checkout scm
         sh '''
         npm ci
+        cp config.prod.json src/config.json
         npm run ci-test
         '''
         archiveArtifacts artifacts: 'coverage/'

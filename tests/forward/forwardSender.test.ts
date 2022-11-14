@@ -1,8 +1,9 @@
 import fetch from "node-fetch";
 import { postForwardRequest } from "../../src/forward/forwardSender";
-import { forwarderApiUrl } from "../../src/forward/forwardEnvironment";
+import { getForwarderApiUrl } from "../../src/forward/forwardEnvironment";
 
 jest.mock("node-fetch");
+jest.mock("../../src/forward/forwardEnvironment");
 
 const TASK_ID =
   "0x0000000000000000000000000000000000000000000000000000000000000abc";
@@ -17,10 +18,13 @@ describe("Forward signer", () => {
     (fetch as any).mockImplementation(async () => ({
       ok: true,
     }));
+    jest
+      .mocked(getForwarderApiUrl)
+      .mockImplementation(() => "http://forwarder");
 
     await postForwardRequest({ some: "request" }, ORACLE_ID, TASK_ID);
 
-    expect(fetch).toHaveBeenCalledWith(forwarderApiUrl + "/forward", {
+    expect(fetch).toHaveBeenCalledWith("http://forwarder/forward", {
       method: "post",
       body: '{"some":"request"}',
       headers: { "Content-Type": "application/json" },
