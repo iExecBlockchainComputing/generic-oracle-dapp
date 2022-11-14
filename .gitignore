@@ -3,3 +3,4 @@ node_modules/
 coverage/
 app/
 tests/test_out/computed.json
+src/config.json

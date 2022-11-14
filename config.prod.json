@@ -1,0 +1,15 @@
+{
+    "forwarderApiUrl": "https://forwarder.oracle-factory.iex.ec",
+    "onChainConfig": {
+        "5": {
+            "forwarder": "0x",
+            "oracle": "0x",
+            "providerUrl": ""
+        },
+        "80001": {
+            "forwarder": "0x",
+            "oracle": "0x",
+            "providerUrl": "https://rpc-mumbai.maticvigil.com"
+        }
+    }
+}

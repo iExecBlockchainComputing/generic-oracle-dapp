@@ -31,12 +31,7 @@ export async function signForwardRequest(
   const oracleAddress = onChainConfig.oracle;
   const providerUrl = onChainConfig.providerUrl;
 
-  let provider;
-  if (providerUrl) {
-    provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  } else {
-    provider = ethers.getDefaultProvider(chainId);
-  }
+  const provider = ethers.getDefaultProvider(providerUrl || chainId);
 
   const receiveResult = new ReceiveResultContractFunction(
     oracleAddress,

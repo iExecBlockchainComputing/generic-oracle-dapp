@@ -1,12 +1,12 @@
 import fetch from "node-fetch";
-import { forwarderApiUrl } from "./forwardEnvironment";
+import { getForwarderApiUrl } from "./forwardEnvironment";
 
 export async function postForwardRequest(
   signedForwardRequest: any,
   oracleId: string,
   taskId: string
 ): Promise<boolean> {
-  const response = await fetch(forwarderApiUrl + "/forward", {
+  const response = await fetch(getForwarderApiUrl() + "/forward", {
     method: "post",
     body: JSON.stringify(signedForwardRequest),
     headers: { "Content-Type": "application/json" },

@@ -1,13 +1,14 @@
 import { ethers } from "ethers";
-import { ClassicOracle__factory } from "@iexec/generic-oracle-contracts/typechain";
+import { IOracleConsumer__factory } from "@iexec/generic-oracle-contracts/typechain";
 
 export class ReceiveResultContractFunction {
   oracleContract; //public for tests
 
   constructor(oracleAddress: string, provider: ethers.providers.BaseProvider) {
-    this.oracleContract = new ClassicOracle__factory()
-      .attach(oracleAddress)
-      .connect(provider);
+    this.oracleContract = IOracleConsumer__factory.connect(
+      oracleAddress,
+      provider
+    );
   }
 
   getGasEstimate(

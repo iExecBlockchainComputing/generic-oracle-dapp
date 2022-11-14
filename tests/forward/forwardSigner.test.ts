@@ -1,4 +1,4 @@
-import { ClassicOracle } from "@iexec/generic-oracle-contracts/typechain";
+import { IOracleConsumer } from "@iexec/generic-oracle-contracts/typechain";
 import { Wallet, BigNumber, utils } from "ethers";
 import { signForwardRequest } from "../../src/forward/forwardSigner";
 import { ReceiveResultContractFunction } from "../../src/forward/oracleContractWrapper";
@@ -21,7 +21,7 @@ describe("Forward signer", () => {
 
   test("should", async () => {
     const receiveResultMock = {
-      oracleContract: {} as ClassicOracle,
+      oracleContract: {} as IOracleConsumer,
       getGasEstimate: () => Promise.resolve(BigNumber.from("100000")),
       getData: () => "0xabcd",
     } as ReceiveResultContractFunction;
