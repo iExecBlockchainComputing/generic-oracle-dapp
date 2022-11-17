@@ -81,13 +81,16 @@ npm run scone
 ```
 iexec app deploy --chain bellecour
 ```
+```
+npx ts-node scripts/buildAppSecret.ts <authorized-reporter-private-key>
+```
 
 ```
 iexec-core-cli app push-owner-secret --secret=$MY_SECRETS --sms=<sms_url> --wallet-path=/tmp/wallet.json --wallet-password
 ```
 or
 ```
-iexec app push-secret --secret-value $MY_SECRETS <app_address> --chain bellecour
+iexec app push-secret --chain bellecour <app_address> --secret-value $MY_SECRETS
 ```
 
 ```
@@ -96,6 +99,11 @@ iexec order sign --app --chain bellecour
 
 ### As requester: trigger crosschain app
 
+Update iexec.json, make requester wallet file available and run:
+```
+runTask.sh <0xrequesterAddress>
+```
+or
 ```
 iexec order sign --request --chain bellecour
 ```
