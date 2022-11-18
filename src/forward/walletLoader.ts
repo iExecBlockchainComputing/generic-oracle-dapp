@@ -1,18 +1,6 @@
-import { ethers } from "ethers";
-import {
-  ClassicOracle,
-  ClassicOracle__factory,
-} from "@iexec/generic-oracle-contracts/typechain";
+import { ethers, Wallet } from "ethers";
 
-const chain = "goerli";
-const oracleReceiver = "0x28291E6A81aC30cE6099144E68D8aEeE2b64052b";
-
-export function loadClassicOracle(
-  encodedArgs: string | undefined
-): ClassicOracle {
-  console.log("Target chain: " + chain);
-  console.log("Target oracle address: " + oracleReceiver);
-
+export function loadWallet(encodedArgs: string | undefined): Wallet {
   if (encodedArgs == undefined) {
     throw Error("Encoded args are required");
   }
@@ -41,15 +29,16 @@ export function loadClassicOracle(
     throw Error("Failed to parse `targetPrivateKey` from decoded secret JSON");
   }
 
-  const provider = new ethers.providers.InfuraProvider(chain, {
-    projectId: infuraProjectId,
-    projectSecret: infuraProjectSecret,
-  });
+  //TODO: Remove infura keys at some point
+  //const provider = getProvider(chainId, infuraProjectId, infuraProjectSecret);
 
-  const wallet = new ethers.Wallet(targetPrivateKey, provider);
-  console.log("Target reporter wallet address: " + wallet.address);
+  const wallet = new ethers.Wallet(targetPrivateKey);
+  console.log(
+    "Recovered authorized reporter wallet for foreign oracle contract [address:%s]",
+    wallet.address
+  );
 
-  return new ClassicOracle__factory().attach(oracleReceiver).connect(wallet);
+  return wallet;
 }
 
 interface OracleArgs {
@@ -57,3 +46,14 @@ interface OracleArgs {
   infuraProjectSecret?: string;
   targetPrivateKey?: string;
 }
+
+// function getProvider(
+//   chainId: number,
+//   infuraProjectId: string,
+//   infuraProjectSecret: string
+// ) {
+//   return new ethers.providers.InfuraProvider(chainId, {
+//     projectId: infuraProjectId,
+//     projectSecret: infuraProjectSecret,
+//   });
+// }

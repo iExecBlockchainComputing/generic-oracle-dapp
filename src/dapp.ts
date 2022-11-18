@@ -1,8 +1,7 @@
 import fsPromises from "fs/promises";
 import utils from "./utils";
-import { loadClassicOracle } from "../src/contractLoader";
 import { apiCall } from "./caller";
-import { jsonParamSetSchema } from "./validators";
+import { jsonParamSetSchema, targetChainsSchema } from "./validators";
 import {
   getInputFilePath,
   extractDataset,
@@ -10,16 +9,9 @@ import {
 } from "./requestConsistency";
 import { encodeValue } from "./resultEncoder";
 import { ethers } from "ethers";
+import { triggerForwardRequests } from "./forward/forwardHandler";
 
 const start = async () => {
-  let classicOracle;
-  try {
-    // validate args or exit before going further
-    classicOracle = loadClassicOracle(process.env.IEXEC_APP_DEVELOPER_SECRET);
-  } catch (e) {
-    console.error("Failed to load ClassicOracle from encoded args [e:%s]", e);
-    return undefined;
-  }
   const inputFolder = process.env.IEXEC_IN;
   let inputFilePath;
   try {
@@ -82,32 +74,27 @@ const start = async () => {
     return undefined;
   }
 
-  try {
-    const tx = await classicOracle.receiveResult(oracleId, encodedValue);
+  // Native command line arguments - 0:node, 1:app.ts, 2:arg1
+  const requestedChainIds = await targetChainsSchema().validate(
+    process.argv[2]
+  );
+  if (requestedChainIds) {
     console.log(
-      "Sent transaction to targeted oracle [tx:%s, oracleId:%s, encodedValue:%s]",
-      tx.hash,
+      "User requesting updates on foreign blockchains [chains:%s]",
+      requestedChainIds
+    );
+    const allForwardRequestsAccepted = await triggerForwardRequests(
+      requestedChainIds,
       oracleId,
       encodedValue
     );
-    return tx
-      .wait()
-      .then((receipt) => {
-        console.log(
-          "Mined transaction for targeted oracle [tx:%s, blockNumber:%s, oracleId:%s]",
-          tx.hash,
-          receipt.blockNumber,
-          oracleId
-        );
-        return encodedValue;
-      })
-      .catch((e) => {
-        console.error("Failed transaction on targeted oracle [e:%s]", e);
-        return undefined;
-      });
-  } catch (e) {
-    console.error("Failed to send transaction [e:%s]", e);
-    return undefined;
+    // Status is logged for information purpose only (app must go on on failure)
+    if (allForwardRequestsAccepted) {
+      console.log("All forward requests accepted by Forwarder API");
+    } else {
+      console.error("At least one forward request rejected by Forwarder API");
+    }
   }
+  return encodedValue;
 };
 export default start;
