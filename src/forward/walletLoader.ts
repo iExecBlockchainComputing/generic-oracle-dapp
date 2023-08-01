@@ -4,12 +4,10 @@ export function loadWallet(encodedArgs: string | undefined): Wallet {
   if (encodedArgs == undefined) {
     throw Error("Encoded args are required");
   }
-  const buff = Buffer.from(encodedArgs, "base64");
-  const appDeveloperSecretsJsonString = buff.toString();
 
   let appDeveloperSecretJson: OracleArgs;
   try {
-    appDeveloperSecretJson = JSON.parse(appDeveloperSecretsJsonString);
+    appDeveloperSecretJson = JSON.parse(encodedArgs);
   } catch (e) {
     throw Error("Failed to parse appDeveloperSecret JSON");
   }

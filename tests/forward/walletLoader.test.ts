@@ -15,7 +15,7 @@ describe("contract loader", () => {
 
   test("should fail since parse payload failed", () => {
     expect(() => {
-      loadWallet(JSON.stringify({ some: "data" }));
+      loadWallet("{ some: 'data' }");
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
   });
 
@@ -41,7 +41,5 @@ describe("contract loader", () => {
 });
 
 function encode(appDeveloperSecretJson: { targetPrivateKey?: string }) {
-  const appDeveloperSecretJsonString = JSON.stringify(appDeveloperSecretJson);
-  const buff = Buffer.from(appDeveloperSecretJsonString, "utf-8");
-  return buff.toString("base64");
+  return JSON.stringify(appDeveloperSecretJson);
 }
