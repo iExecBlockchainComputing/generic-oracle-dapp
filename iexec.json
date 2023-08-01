@@ -16,10 +16,10 @@
     "callback": "0x0000000000000000000000000000000000000000"
   },
   "app": {
-    "owner": "0x15Bd06807eF0F2284a9C5baeAA2EF4d5a88eB72A",
-    "name": "generic-oracle-dapp-xc",
+    "owner": "<0xAppDeveloper>",
+    "name": "generic-oracle-dapp",
     "type": "DOCKER",
-    "multiaddr": "docker.io/iexechub/generic-oracle-dapp:feature-d0b90550-sconify-5.3.15-production",
+    "multiaddr": "docker.io/iexechub/generic-oracle-dapp:<xxx>",
     "checksum": "0xf7485b254816519e4e49aaaa66e31a99877f3fd19feb2dfe880513b44bfe4fde",
     "mrenclave": {
       "provider": "SCONE",
@@ -31,7 +31,7 @@
   },
   "order": {
     "requestorder": {
-      "app": "0xdce234BF640235549D4D95C4764B1863FfDa7cF4",
+      "app": "<0xApp>",
       "appmaxprice": "0",
       "dataset": "0x0000000000000000000000000000000000000000",
       "datasetmaxprice": "0",
@@ -46,15 +46,15 @@
       "params": {
         "iexec_args": "5,80001",
         "iexec_input_files": [
-          "https://raw.githubusercontent.com/iExecBlockchainComputing/generic-oracle-dapp/feature/metatxs-to-forwarder-api/tests/test_files/input_file_no_dataset.json"
+          "https://raw.githubusercontent.com/iExecBlockchainComputing/generic-oracle-dapp/develop/tests/test_files/input_file_no_dataset.json"
         ],
         "iexec_result_encryption": false,
         "iexec_developer_logger": true
       },
-      "requester": "0x15Bd06807eF0F2284a9C5baeAA2EF4d5a88eB72A"
+      "requester": "<0xRequester>"
     },
     "apporder": {
-      "app": "0xdce234BF640235549D4D95C4764B1863FfDa7cF4",
+      "app": "<0xApp>",
       "appprice": "0",
       "volume": "1000",
       "tag": "0x0000000000000000000000000000000000000000000000000000000000000001",
