@@ -20,6 +20,7 @@
   "include": [
     "src",
     "tests",
-    "node_modules/@iexec/generic-oracle-contracts/typechain"
-, "scripts/buildAppSecret.ts"  ]
+    "node_modules/@iexec/generic-oracle-contracts/typechain",
+    "scripts/buildAppSecret.ts"
+  ]
 }

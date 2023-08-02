@@ -1,6 +1,6 @@
 {
   "name": "generic-oracle-dapp",
-  "version": "1.1.0",
+  "version": "2.0.1",
   "description": "This application is meant to build a docker container usable in SGX iexec tasks. The dapp take an input file containing a param set in a JSON format. The param set describe the request that should be done to the target API in order to get the wanted data.",
   "main": "src/app.js",
   "dependencies": {
@@ -36,6 +36,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "check-format": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|json)\"",
     "test": "jest --coverage",
     "itest": "jest --coverage tests/dapp.integ.test.ts",
     "ci-test": "jest --coverage --testPathIgnorePatterns=\"dapp.integ\"",

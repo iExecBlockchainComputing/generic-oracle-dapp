@@ -49,6 +49,7 @@ To run the tests do `npm i` as sual then run `npm test`
 
 For having all tests as successful, add a `.env` symlink at the root folder of the project pointing somewhere on your host:
 `.env -> .env-oracle-itest`
+
 ```
 INFURA_PROJECT_ID=
 INFURA_PROJECT_SECRET=
@@ -76,11 +77,12 @@ npm run scone
 
 ## Test Dapp on live network
 
-
 ### As app developer: create app and set secrets
+
 ```
 iexec app deploy --chain bellecour
 ```
+
 ```
 npx ts-node scripts/buildAppSecret.ts <authorized-reporter-private-key>
 ```
@@ -88,7 +90,9 @@ npx ts-node scripts/buildAppSecret.ts <authorized-reporter-private-key>
 ```
 iexec-core-cli app push-owner-secret --secret=$MY_SECRETS --sms=<sms_url> --wallet-path=/tmp/wallet.json --wallet-password
 ```
+
 or
+
 ```
 iexec app push-secret --chain bellecour <app_address> --secret-value $MY_SECRETS
 ```
@@ -100,17 +104,22 @@ iexec order sign --app --chain bellecour
 ### As requester: trigger crosschain app
 
 Update iexec.json, make requester wallet file available and run:
+
 ```
 runTask.sh <0xrequesterAddress>
 ```
+
 or
+
 ```
 iexec order sign --request --chain bellecour
 ```
+
 ```
 iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour
 iexec orderbook workerpool --tag tee <0xworkerpool> --chain bellecour --raw | jq -r .workerpoolOrders[0].orderHash
 ```
+
 ```
 iexec order fill --chain bellecour --workerpool <order>
 ```
