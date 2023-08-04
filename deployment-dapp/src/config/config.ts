@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 export const HOST = "https://bellecour.iex.ec";
 
 //deployment parameters
-export const APP_NAME = "generic-oracle";
+export const APP_NAME = "generic-oracle-dapp";
 export const APP_TYPE = "DOCKER";
 export const FRAMEWORK = "scone";
 
