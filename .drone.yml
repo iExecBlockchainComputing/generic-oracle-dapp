@@ -30,6 +30,7 @@ steps:
   - name: unit-test
     image: node:14-alpine3.11
     commands:
+      - cp config.prod.json src/config.json
       - npm run test
 
   - name: docker-publish-dry-run
@@ -81,6 +82,7 @@ steps:
   - name: test
     image: node:14-alpine3.11
     commands:
+      - cp config.prod.json src/config.json
       - npm run test
 
   - name: docker-publish-dev-non-tee
@@ -134,6 +136,7 @@ steps:
   - name: test
     image: node:14-alpine3.11
     commands:
+      - cp config.prod.json src/config.json
       - npm run test
 
   - name: extract-version-from-package
