@@ -40,7 +40,7 @@ steps:
     settings:
       context: ./docker
       dry_run: true
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
       registry: docker-regis.iex.ec
       repo: docker-regis.iex.ec/product/generic-oracle-dapp
       pull_image: true
@@ -91,7 +91,7 @@ steps:
     pull: always
     settings:
       context: ./docker
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
       registry: docker-regis.iex.ec
       repo: docker-regis.iex.ec/product/generic-oracle-dapp
       pull_image: true
@@ -151,7 +151,7 @@ steps:
     pull: always
     settings:
       context: ./docker
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
       # tag comes from .tags file
       registry: docker-regis.iex.ec
       repo: docker-regis.iex.ec/product/generic-oracle-dapp
