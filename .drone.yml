@@ -37,6 +37,7 @@ steps:
     image: plugins/docker
     pull: always
     settings:
+      context: ./docker
       dry_run: true
       dockerfile: Dockerfile
       registry: docker-regis.iex.ec
@@ -46,6 +47,8 @@ steps:
         from_secret: nexus-user
       password:
         from_secret: nexus-password
+      build_args:
+        - CONFIG_FILE: config.prod.json
 
 ---
 # dapp generic-oracle-dapp publish docker dev non-tee pipeline
@@ -85,6 +88,7 @@ steps:
     image: plugins/docker
     pull: always
     settings:
+      context: ./docker
       dockerfile: Dockerfile
       registry: docker-regis.iex.ec
       repo: docker-regis.iex.ec/product/generic-oracle-dapp
@@ -96,6 +100,8 @@ steps:
       tags:
         - dev
         - "dev-${DRONE_COMMIT}"
+      build_args:
+        - CONFIG_FILE: config.dev.json
 
 ---
 # dapp generic-oracle-dapp publish docker prod non-tee pipeline
@@ -141,7 +147,8 @@ steps:
     image: plugins/docker
     pull: always
     settings:
-$      dockerfile: Dockerfile
+      context: ./docker
+      dockerfile: Dockerfile
       # tag comes from .tags file
       registry: docker-regis.iex.ec
       repo: docker-regis.iex.ec/product/generic-oracle-dapp
@@ -150,6 +157,8 @@ $      dockerfile: Dockerfile
         from_secret: nexus-user
       password:
         from_secret: nexus-password
+      build_args:
+        - CONFIG_FILE: config.prod.json
 
 ---
 #pipeline to publish dapp contract on iexec
