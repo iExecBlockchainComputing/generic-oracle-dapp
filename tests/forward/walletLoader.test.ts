@@ -15,38 +15,13 @@ describe("contract loader", () => {
 
   test("should fail since parse payload failed", () => {
     expect(() => {
-      loadWallet(JSON.stringify({ some: "data" }));
+      loadWallet("{ some: 'data' }");
     }).toThrowError("Failed to parse appDeveloperSecret JSON");
-  });
-
-  test("should fail since no infuraProjectId", () => {
-    expect(() => {
-      loadWallet(encode({}));
-    }).toThrowError(
-      "Failed to parse `infuraProjectId` from decoded secret JSON"
-    );
-  });
-
-  test("should fail since no infuraProjectSecret", () => {
-    expect(() => {
-      loadWallet(
-        encode({
-          infuraProjectId: "id",
-        })
-      );
-    }).toThrowError(
-      "Failed to parse `infuraProjectSecret` from decoded secret JSON"
-    );
   });
 
   test("should fail since no targetPrivateKey", () => {
     expect(() => {
-      loadWallet(
-        encode({
-          infuraProjectId: "id",
-          infuraProjectSecret: "secret",
-        })
-      );
+      loadWallet(encode({}));
     }).toThrowError(
       "Failed to parse `targetPrivateKey` from decoded secret JSON"
     );
@@ -55,8 +30,6 @@ describe("contract loader", () => {
   test("should return wallet", async () => {
     const wallet = loadWallet(
       encode({
-        infuraProjectId: "some",
-        infuraProjectSecret: "secret",
         targetPrivateKey:
           "0x0000000000000000000000000000000000000000000000000000000000000001",
       })
@@ -67,12 +40,6 @@ describe("contract loader", () => {
   });
 });
 
-function encode(appDeveloperSecretJson: {
-  infuraProjectId?: string;
-  infuraProjectSecret?: string;
-  targetPrivateKey?: string;
-}) {
-  const appDeveloperSecretJsonString = JSON.stringify(appDeveloperSecretJson);
-  const buff = Buffer.from(appDeveloperSecretJsonString, "utf-8");
-  return buff.toString("base64");
+function encode(appDeveloperSecretJson: { targetPrivateKey?: string }) {
+  return JSON.stringify(appDeveloperSecretJson);
 }
