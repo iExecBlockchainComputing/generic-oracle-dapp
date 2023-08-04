@@ -1,7 +1,7 @@
 # dapp generic-oracle-dapp default pipeline
 kind: pipeline
 type: docker
-name: dapp-default
+name: default
 
 trigger:
   event:
@@ -48,7 +48,7 @@ steps:
       password:
         from_secret: nexus-password
       build_args:
-        - CONFIG_FILE: config.prod.json
+        - CONFIG_FILE=config.prod.json
 
 ---
 # dapp generic-oracle-dapp publish docker dev non-tee pipeline
@@ -101,7 +101,7 @@ steps:
         - dev
         - "dev-${DRONE_COMMIT}"
       build_args:
-        - CONFIG_FILE: config.dev.json
+        - CONFIG_FILE=config.dev.json
 
 ---
 # dapp generic-oracle-dapp publish docker prod non-tee pipeline
@@ -158,7 +158,7 @@ steps:
       password:
         from_secret: nexus-password
       build_args:
-        - CONFIG_FILE: config.prod.json
+        - CONFIG_FILE=config.prod.json
 
 ---
 #pipeline to publish dapp contract on iexec
