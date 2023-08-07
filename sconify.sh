@@ -2,16 +2,17 @@
 
 # declare the app entrypoint
 ENTRYPOINT="node /app/app.js"
-# declare an image name
+USER_DOCKER_HUB="your_docker_hub_username"
+# Declare image related variables
 IMG_NAME=generic-oracle-dapp
+NON_TEE_TAG=non-tee
+DEBUG_TAG=1.0.0-debug
+IMG_FROM=${USER_DOCKER_HUB}/${IMG_NAME}:${NON_TEE_TAG}
+IMG_TO=${USER_DOCKER_HUB}/${IMG_NAME}:${DEBUG_TAG}
 
-IMG_FROM=${IMG_NAME}:temp-non-tee
-IMG_TO=${IMG_NAME}:tee-debug
 
 # build the regular non-TEE image
 docker build . -t ${IMG_FROM}
-
-# pull the SCONE curated image corresponding to our base image
 docker pull registry.scontain.com:5050/sconecuratedimages/node:14.4.0-alpine3.11
 
 docker run -it --rm \
@@ -29,7 +30,7 @@ docker run -it --rm \
                 --heap=1G \
                 --dlopen=2 \
                 --no-color \
-                --command="node /app/app.js" \
+                --command=${ENTRYPOINT} \
                 && echo -e "\n------------------\n" \
                 && echo "successfully built TEE docker image => ${IMG_TO}" \
                 && echo "application mrenclave.fingerprint is $(docker run -it --rm -e SCONE_HASH=1 ${IMG_TO})"
