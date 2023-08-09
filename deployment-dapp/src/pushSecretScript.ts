@@ -72,8 +72,8 @@ const main = async () => {
   //deploy app
   //push app secret to the secret management
   const jsonSecret = JSON.stringify({
-    REPORTER_DEV_PRIVATE_KEY,
-    REPORTER_PROD_PRIVATE_KEY,
+    targetPrivateKey: REPORTER_DEV_PRIVATE_KEY,
+    // targetPrivateKey: REPORTER_PROD_PRIVATE_KEY,
   });
   await pushSecret(iexec, appAddress, jsonSecret);
 };
