@@ -3,6 +3,17 @@
   "version": "2.0.1",
   "description": "This application is meant to build a docker container usable in SGX iexec tasks. The dapp take an input file containing a param set in a JSON format. The param set describe the request that should be done to the target API in order to get the wanted data.",
   "main": "src/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start:local": "tsc && node -r dotenv/config app/src/app.js",
+    "scone": "bash local-dapp-test/sconify.sh",
+    "test": "jest --coverage",
+    "ci-test": "jest --coverage --testPathIgnorePatterns=\"dapp.integ\"",
+    "lint": "eslint --ext .js,.ts .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "check-format": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|json)\"",
+    "itest": "jest --coverage tests/dapp.integ.test.ts"
+  },
   "dependencies": {
     "@iexec/generic-oracle-contracts": "^2.2.0",
     "big.js": "^6.0.3",
@@ -32,16 +43,6 @@
     "ts-node-dev": "^2.0.0",
     "typechain": "^8.0.0",
     "typescript": "^4.7.3"
-  },
-  "scripts": {
-    "lint": "eslint --ext .js,.ts .",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "check-format": "prettier --ignore-path .gitignore --check \"**/*.+(js|ts|json)\"",
-    "test": "jest --coverage",
-    "itest": "jest --coverage tests/dapp.integ.test.ts",
-    "ci-test": "jest --coverage --testPathIgnorePatterns=\"dapp.integ\"",
-    "build": "tsc",
-    "scone": "bash docker/sconify.sh"
   },
   "repository": {
     "type": "git",

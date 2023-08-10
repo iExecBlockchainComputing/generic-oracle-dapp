@@ -4,6 +4,7 @@ coverage/
 app/
 tests/test_out/computed.json
 src/config.json
+tmp/
 
 chain.json
 deployed.json
