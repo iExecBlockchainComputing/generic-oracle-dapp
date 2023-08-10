@@ -25,7 +25,6 @@
 # Check for 'dev' or 'prod' and run the init commands
 if [ "$1" == "dev" ] || [ "$1" == "prod" ]; then
     echo "Executing init command..."
-    iexec init
     iexec init storage
 
 else
