@@ -1,0 +1,7 @@
+../coverage
+../deployment-dapp
+../node_modules
+.eslintrc
+.drone.yml
+.gitignore
+.jest.config.js

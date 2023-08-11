@@ -9,14 +9,12 @@ jest.mock("../../src/forward/forwardSigner");
 jest.mock("../../src/forward/forwardSender");
 
 const loadWalletMock = loadWallet as jest.MockedFunction<typeof loadWallet>;
-const getSignedForwardRequestMock =
-  signForwardRequest as jest.MockedFunction<
-    typeof signForwardRequest
-  >;
-const postMultiForwardRequestMock =
-  postForwardRequest as jest.MockedFunction<
-    typeof postForwardRequest
-  >;
+const getSignedForwardRequestMock = signForwardRequest as jest.MockedFunction<
+  typeof signForwardRequest
+>;
+const postMultiForwardRequestMock = postForwardRequest as jest.MockedFunction<
+  typeof postForwardRequest
+>;
 
 const TASK_ID =
   "0x0000000000000000000000000000000000000000000000000000000000000abc";
