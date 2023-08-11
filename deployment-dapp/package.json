@@ -1,6 +1,6 @@
 {
   "name": "deployment-dapp",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "deploy dapp contract on iexec for oracle factory",
   "type": "module",
   "main": "deploy.js",

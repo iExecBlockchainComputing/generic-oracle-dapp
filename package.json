@@ -1,6 +1,6 @@
 {
   "name": "generic-oracle-dapp",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "This application is meant to build a docker container usable in SGX iexec tasks. The dapp take an input file containing a param set in a JSON format. The param set describe the request that should be done to the target API in order to get the wanted data.",
   "main": "src/app.js",
   "scripts": {
