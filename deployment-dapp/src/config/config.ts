@@ -18,7 +18,7 @@ export const WEB3_MAIL_ENS_NAME_DEV = "oracle-factory-dev.apps.iexec.eth";
 export const WEB3_MAIL_ENS_NAME_PROD = "oracle-factory.apps.iexec.eth";
 
 // image
-const SCONIFIER_VERSION = "5.7.5-v9";
+const SCONIFIER_VERSION = "5.7.5-v12";
 const dappVersion = JSON.parse(
   readFileSync("../package.json", "utf-8")
 ).version;
