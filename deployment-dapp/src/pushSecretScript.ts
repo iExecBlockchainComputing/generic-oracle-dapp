@@ -37,20 +37,28 @@ const main = async () => {
     throw Error("Missing env REPORTER_PROD_PRIVATE_KEY");
 
   let privateKey;
+  let reporterPrivateKey;
   if (
     DRONE_DEPLOY_TO === DRONE_TARGET_DEPLOY_DEV ||
     DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_DEV
   ) {
     privateKey = WALLET_PRIVATE_KEY_DEV;
+    reporterPrivateKey = REPORTER_DEV_PRIVATE_KEY;
   } else if (
     DRONE_DEPLOY_TO === DRONE_TARGET_DEPLOY_PROD ||
     DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_PROD
   ) {
     privateKey = WALLET_PRIVATE_KEY_PROD;
+    reporterPrivateKey = REPORTER_PROD_PRIVATE_KEY;
   }
 
   if (!privateKey)
     throw Error(`Failed to get privateKey for target ${DRONE_DEPLOY_TO}`);
+
+  if (!reporterPrivateKey)
+    throw Error(
+      `Failed to get reporterPrivateKey for target ${DRONE_DEPLOY_TO}`
+    );
 
   const iexec = getIExec(privateKey);
 
@@ -72,8 +80,7 @@ const main = async () => {
   //deploy app
   //push app secret to the secret management
   const jsonSecret = JSON.stringify({
-    targetPrivateKey: REPORTER_DEV_PRIVATE_KEY,
-    // targetPrivateKey: REPORTER_PROD_PRIVATE_KEY,
+    targetPrivateKey: reporterPrivateKey,
   });
   await pushSecret(iexec, appAddress, jsonSecret);
 };
