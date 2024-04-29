@@ -59,12 +59,6 @@ const start = async () => {
     JSONPath: paramSet.JSONPath,
     dataType: paramSet.dataType,
   });
-  console.log(
-    "Received response from API [url:%s, date:%s, value:%s]",
-    paramSet.url,
-    new Date(date * 1000),
-    value
-  );
 
   let encodedValue: string;
   try {
