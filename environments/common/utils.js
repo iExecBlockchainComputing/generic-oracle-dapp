@@ -1,6 +1,6 @@
 // when editing this file update types/index.d.ts
 
-export const KNOWN_ENVS = ['prod', 'staging', 'bubble'];
+export const KNOWN_ENVS = ["prod", "staging", "bubble"];
 
 export const KNOWN_KEYS = [
   "chainId",
@@ -21,6 +21,5 @@ export const KNOWN_KEYS = [
   "dataProtectorSubgraph",
   "ipfsNode",
   "ipfsGateway",
-  "workerpoolProdAddress"
+  "workerpoolProdAddress",
 ];
-

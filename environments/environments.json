@@ -33,7 +33,7 @@
     "ipfsNodeURL": "https://ipfs-upload.stagingv8.iex.ec",
     "pocoSubgraphURL": "https://thegraph.bellecour.iex.ec/subgraphs/name/bellecour/poco-v5",
     "voucherSubgraphURL": "TO_COMPLETE",
-    
+
     "workerpoolProdAddress": "prod-stagingv8.main.pools.iexec.eth"
   },
   "bubble": {
@@ -50,8 +50,8 @@
     "ipfsNodeURL": "https://ipfs-upload.v8-bellecour.iex.ec",
     "pocoSubgraphURL": "http://thegraph.wp-throughput.az1.internal:8000/subgraphs/name/bellecour/poco-v5",
     "voucherSubgraphURL": "http://thegraph.wp-throughput.az1.internal:8000/subgraphs/name/bellecour/iexec-voucher",
-    
-    "oracleDappAddress" : "oracle-factory-bubble.iexec.eth",
+
+    "oracleDappAddress": "oracle-factory-bubble.iexec.eth",
     "workerpoolProdAddress": "0x3779Da315D935D3E3957561667236BF6859C1b0E"
   }
 }

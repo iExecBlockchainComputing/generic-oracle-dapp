@@ -13,7 +13,7 @@ import {
   WEB3_MAIL_ENS_NAME_PROD,
 } from "./config/config.js";
 import { orderHashSchema } from "./utils/validator.js";
-import 'dotenv/config';
+import "dotenv/config";
 
 const main = async () => {
   // get env variables from drone
@@ -46,12 +46,13 @@ const main = async () => {
   ) {
     privateKey = WALLET_PRIVATE_KEY_DEV;
   } else if (
-    [DRONE_TARGET_DEPLOY_BUBBLE, DRONE_TARGET_REVOKE_SELL_ORDER_BUBBLE].includes(
-      DRONE_DEPLOY_TO
-    )
+    [
+      DRONE_TARGET_DEPLOY_BUBBLE,
+      DRONE_TARGET_REVOKE_SELL_ORDER_BUBBLE,
+    ].includes(DRONE_DEPLOY_TO)
   ) {
     privateKey = WALLET_PRIVATE_KEY_BUBBLE;
-  }else if (
+  } else if (
     [DRONE_TARGET_DEPLOY_PROD, DRONE_TARGET_REVOKE_SELL_ORDER_PROD].includes(
       DRONE_DEPLOY_TO
     )
@@ -71,7 +72,7 @@ const main = async () => {
       ensName = WEB3_MAIL_ENS_NAME_DEV;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_REVOKE_SELL_ORDER_BUBBLE) {
       ensName = WEB3_MAIL_ENS_NAME_BUBBLE;
-    }else if (DRONE_DEPLOY_TO === DRONE_TARGET_REVOKE_SELL_ORDER_PROD) {
+    } else if (DRONE_DEPLOY_TO === DRONE_TARGET_REVOKE_SELL_ORDER_PROD) {
       ensName = WEB3_MAIL_ENS_NAME_PROD;
     }
     if (!ensName)

@@ -1,4 +1,4 @@
-import { ENS, IExec } from 'iexec';
+import { ENS, IExec } from "iexec";
 
 export const configureEnsName = async (
   iexec: IExec,
@@ -12,7 +12,7 @@ export const configureEnsName = async (
     );
     return;
   }
-  const separatorIndex = ens.indexOf('.');
+  const separatorIndex = ens.indexOf(".");
   const label = ens.substring(0, separatorIndex);
   const domain = ens.substring(separatorIndex + 1);
   const claimName = await iexec.ens.claimName(label, domain);

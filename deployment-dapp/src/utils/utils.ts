@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import { IExec, utils } from "iexec";
-import { iexecOptions } from '../config/config.js';
+import { iexecOptions } from "../config/config.js";
 
 export const getIExec = (privateKey: string): IExec => {
   const ethProvider = utils.getSignerFromPrivateKey(

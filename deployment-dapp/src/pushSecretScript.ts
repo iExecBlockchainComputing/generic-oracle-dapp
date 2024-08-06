@@ -12,7 +12,7 @@ import {
 import { pushSecret } from "./singleFunction/pushSecret.js";
 import { resolveName } from "./singleFunction/resolveName.js";
 import { getIExec, loadAppAddress } from "./utils/utils.js";
-import 'dotenv/config';
+import "dotenv/config";
 
 const main = async () => {
   // get env variables from drone
@@ -86,7 +86,7 @@ const main = async () => {
       ensName = WEB3_MAIL_ENS_NAME_DEV;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_BUBBLE) {
       ensName = WEB3_MAIL_ENS_NAME_BUBBLE;
-    }else if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_PROD) {
+    } else if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_PROD) {
       ensName = WEB3_MAIL_ENS_NAME_PROD;
     }
     if (!ensName)

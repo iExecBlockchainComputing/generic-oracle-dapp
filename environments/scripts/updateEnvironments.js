@@ -1,6 +1,6 @@
 import fs from "fs";
 import { KNOWN_ENVS, KNOWN_KEYS } from "../common/utils.js";
-import 'dotenv/config';
+import "dotenv/config";
 
 const ENV_JSON = "environments.json";
 
