@@ -13,10 +13,8 @@
     "ipfsNodeURL": "https://ipfs-upload.v8-bellecour.iex.ec",
     "pocoSubgraphURL": "https://thegraph.bellecour.iex.ec/subgraphs/name/bellecour/poco-v5",
     "voucherSubgraphURL": "TO_COMPLETE",
-    "dappAddressOrENS": "0x3a4Ab33F3D605e75b6D00A32A0Fa55C3628F6A59",
-    "dappWhitelistAddress": "25455501",
-    "dataProtectorSubgraph": "https://thegraph-product.iex.ec/subgraphs/name/bellecour/dataprotector-v2",
 
+    "dappAddressOrENS": "TO_COMPLETE",
     "workerpoolProdAddress": "prod-v8-bellecour.main.pools.iexec.eth"
   },
   "staging": {
@@ -34,6 +32,7 @@
     "pocoSubgraphURL": "https://thegraph.bellecour.iex.ec/subgraphs/name/bellecour/poco-v5",
     "voucherSubgraphURL": "TO_COMPLETE",
 
+    "dappAddressOrENS": "TO_COMPLETE",
     "workerpoolProdAddress": "prod-stagingv8.main.pools.iexec.eth"
   },
   "bubble": {
@@ -51,7 +50,7 @@
     "pocoSubgraphURL": "http://thegraph.wp-throughput.az1.internal:8000/subgraphs/name/bellecour/poco-v5",
     "voucherSubgraphURL": "http://thegraph.wp-throughput.az1.internal:8000/subgraphs/name/bellecour/iexec-voucher",
 
-    "oracleDappAddress": "oracle-factory-bubble.iexec.eth",
+    "dappAddressOrENS": "0x822A4B3D5650398723B9D3233598aaE8ba501d22",
     "workerpoolProdAddress": "0x3779Da315D935D3E3957561667236BF6859C1b0E"
   }
 }
