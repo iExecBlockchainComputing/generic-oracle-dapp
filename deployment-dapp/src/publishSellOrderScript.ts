@@ -8,9 +8,9 @@ import {
   DRONE_TARGET_DEPLOY_DEV,
   DRONE_TARGET_DEPLOY_BUBBLE,
   DRONE_TARGET_DEPLOY_PROD,
-  WEB3_MAIL_ENS_NAME_DEV,
-  WEB3_MAIL_ENS_NAME_BUBBLE,
-  WEB3_MAIL_ENS_NAME_PROD,
+  ORACLE_FACTORY_DAPP_ENS_NAME_DEV,
+  ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE,
+  ORACLE_FACTORY_DAPP_ENS_NAME_PROD,
   DEFAULT_APP_PRICE,
   DEFAULT_APP_VOLUME,
 } from "./config/config.js";
@@ -74,11 +74,11 @@ const main = async () => {
     console.log("No app address found falling back to ENS");
     let ensName;
     if (DRONE_DEPLOY_TO === DRONE_TARGET_SELL_ORDER_DEV) {
-      ensName = WEB3_MAIL_ENS_NAME_DEV;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_DEV;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_SELL_ORDER_BUBBLE) {
-      ensName = WEB3_MAIL_ENS_NAME_BUBBLE;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_SELL_ORDER_PROD) {
-      ensName = WEB3_MAIL_ENS_NAME_PROD;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_PROD;
     }
     if (!ensName)
       throw Error(`Failed to get ens name for target ${DRONE_DEPLOY_TO}`);

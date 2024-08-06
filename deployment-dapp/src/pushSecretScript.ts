@@ -5,9 +5,9 @@ import {
   DRONE_TARGET_PUSH_SECRET_BUBBLE,
   DRONE_TARGET_PUSH_SECRET_DEV,
   DRONE_TARGET_PUSH_SECRET_PROD,
-  WEB3_MAIL_ENS_NAME_BUBBLE,
-  WEB3_MAIL_ENS_NAME_DEV,
-  WEB3_MAIL_ENS_NAME_PROD,
+  ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE,
+  ORACLE_FACTORY_DAPP_ENS_NAME_DEV,
+  ORACLE_FACTORY_DAPP_ENS_NAME_PROD,
 } from "./config/config.js";
 import { pushSecret } from "./singleFunction/pushSecret.js";
 import { resolveName } from "./singleFunction/resolveName.js";
@@ -83,11 +83,11 @@ const main = async () => {
     console.log("No app address found falling back to ENS");
     let ensName;
     if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_DEV) {
-      ensName = WEB3_MAIL_ENS_NAME_DEV;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_DEV;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_BUBBLE) {
-      ensName = WEB3_MAIL_ENS_NAME_BUBBLE;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE;
     } else if (DRONE_DEPLOY_TO === DRONE_TARGET_PUSH_SECRET_PROD) {
-      ensName = WEB3_MAIL_ENS_NAME_PROD;
+      ensName = ORACLE_FACTORY_DAPP_ENS_NAME_PROD;
     }
     if (!ensName)
       throw Error(`Failed to get ens name for target ${DRONE_DEPLOY_TO}`);

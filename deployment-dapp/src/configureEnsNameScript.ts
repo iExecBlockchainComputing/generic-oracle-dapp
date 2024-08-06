@@ -2,9 +2,9 @@ import {
   DRONE_TARGET_DEPLOY_DEV,
   DRONE_TARGET_DEPLOY_BUBBLE,
   DRONE_TARGET_DEPLOY_PROD,
-  WEB3_MAIL_ENS_NAME_DEV,
-  WEB3_MAIL_ENS_NAME_BUBBLE,
-  WEB3_MAIL_ENS_NAME_PROD,
+  ORACLE_FACTORY_DAPP_ENS_NAME_DEV,
+  ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE,
+  ORACLE_FACTORY_DAPP_ENS_NAME_PROD,
 } from "./config/config.js";
 import { getIExec, loadAppAddress } from "./utils/utils.js";
 import { configureEnsName } from "./singleFunction/configureEnsName.js";
@@ -33,13 +33,13 @@ const main = async () => {
   let ensName;
   if (DRONE_DEPLOY_TO === DRONE_TARGET_DEPLOY_DEV) {
     privateKey = WALLET_PRIVATE_KEY_DEV;
-    ensName = WEB3_MAIL_ENS_NAME_DEV;
+    ensName = ORACLE_FACTORY_DAPP_ENS_NAME_DEV;
   } else if (DRONE_DEPLOY_TO === DRONE_TARGET_DEPLOY_BUBBLE) {
     privateKey = WALLET_PRIVATE_KEY_BUBBLE;
-    ensName = WEB3_MAIL_ENS_NAME_BUBBLE;
+    ensName = ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE;
   } else if (DRONE_DEPLOY_TO === DRONE_TARGET_DEPLOY_PROD) {
     privateKey = WALLET_PRIVATE_KEY_PROD;
-    ensName = WEB3_MAIL_ENS_NAME_PROD;
+    ensName = ORACLE_FACTORY_DAPP_ENS_NAME_PROD;
   }
 
   if (!privateKey)

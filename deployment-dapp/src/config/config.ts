@@ -49,9 +49,9 @@ export const DEFAULT_APP_VOLUME = 1000000;
 export const APP_TAG = ["tee", "scone"];
 
 //ENS name
-export const WEB3_MAIL_ENS_NAME_DEV = "oracle-factory-dev.apps.iexec.eth";
-export const WEB3_MAIL_ENS_NAME_BUBBLE = "oracle-factory-bubble.iexec.eth";
-export const WEB3_MAIL_ENS_NAME_PROD = "oracle-factory.apps.iexec.eth";
+export const ORACLE_FACTORY_DAPP_ENS_NAME_DEV = "oracle-factory-dev.apps.iexec.eth";
+export const ORACLE_FACTORY_DAPP_ENS_NAME_BUBBLE = "oracle-factory-bubble.iexec.eth";
+export const ORACLE_FACTORY_DAPP_ENS_NAME_PROD = "oracle-factory.apps.iexec.eth";
 
 // image
 const SCONIFIER_VERSION = "5.7.5-v12";
