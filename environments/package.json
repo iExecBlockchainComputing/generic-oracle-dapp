@@ -6,5 +6,8 @@
   "types": "./types/index.d.ts",
   "scripts": {
     "update-env": "node scripts/updateEnvironments.js"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
   }
 }
