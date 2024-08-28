@@ -39,12 +39,11 @@ const main = async () => {
   )
     throw Error(`Invalid promote target ${DRONE_DEPLOY_TO}`);
 
-  if (!REPORTER_DEV_PRIVATE_KEY)
+  if (DRONE_TARGET_DEPLOY_DEV === DRONE_DEPLOY_TO && !REPORTER_DEV_PRIVATE_KEY)
     throw Error("Missing env REPORTER_DEV_PRIVATE_KEY");
-  if (!REPORTER_BUBBLE_PRIVATE_KEY)
+  if (DRONE_TARGET_DEPLOY_BUBBLE === DRONE_DEPLOY_TO && !REPORTER_BUBBLE_PRIVATE_KEY)
     throw Error("Missing env REPORTER_BUBBLE_PRIVATE_KEY");
-
-  if (!REPORTER_PROD_PRIVATE_KEY)
+  if (DRONE_TARGET_DEPLOY_PROD === DRONE_DEPLOY_TO && !REPORTER_PROD_PRIVATE_KEY)
     throw Error("Missing env REPORTER_PROD_PRIVATE_KEY");
 
   let privateKey;
