@@ -2,31 +2,37 @@ import { KnownEnv, getEnvironment } from "@iexec/environments";
 import { readFileSync } from "fs";
 import "dotenv/config";
 
-const { ENV, RPC_URL, HUB_ADDRESS, ENS_REGISTRY_ADDRESS, ENS_PUBLIC_RESOLVER_ADDRESS, SMS_URL, IEXEC_GATEWAY_URL, RESULT_PROX_URL, IPFS_GATEWAY_URL, IPFS_NODE_URL } = process.env ;
+const { ENV } = process.env;
 const {
   chainId,
   rpcURL,
   hubAddress,
   ensRegistryAddress,
   ensPublicResolverAddress,
+  voucherHubAddress,
   smsURL,
   iexecGatewayURL,
   resultProxyURL,
   ipfsGatewayURL,
   ipfsNodeURL,
+  pocoSubgraphURL,
+  voucherSubgraphURL,
 } = getEnvironment(ENV as KnownEnv);
 
 export const iexecOptions = {
   chainId,
-  rpcURL: RPC_URL ?? rpcURL,
-  hubAddress : HUB_ADDRESS ?? hubAddress,
-  ensRegistryAddress : ENS_REGISTRY_ADDRESS ?? ensRegistryAddress,
-  ensPublicResolverAddress : ENS_PUBLIC_RESOLVER_ADDRESS ?? ensPublicResolverAddress,
-  smsURL : SMS_URL ?? smsURL,
-  iexecGatewayURL : IEXEC_GATEWAY_URL ?? iexecGatewayURL,
-  resultProxyURL : RESULT_PROX_URL ?? resultProxyURL,
-  ipfsGatewayURL : IPFS_GATEWAY_URL ?? ipfsGatewayURL,
-  ipfsNodeURL : IPFS_NODE_URL ?? ipfsNodeURL,
+  rpcURL,
+  hubAddress,
+  ensRegistryAddress,
+  ensPublicResolverAddress,
+  voucherHubAddress,
+  smsURL,
+  iexecGatewayURL,
+  resultProxyURL,
+  ipfsGatewayURL,
+  ipfsNodeURL,
+  pocoSubgraphURL,
+  voucherSubgraphURL,
 };
 
 //hosting url
