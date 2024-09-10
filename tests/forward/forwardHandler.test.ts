@@ -18,7 +18,7 @@ const postMultiForwardRequestMock = postForwardRequest as jest.MockedFunction<
 
 const TASK_ID =
   "0x0000000000000000000000000000000000000000000000000000000000000abc";
-const CHAIN_ID = 5;
+const CHAIN_ID = 137;
 const ORACLE_ID = "0x1";
 const VALUE = "0x2";
 const wallet = new Wallet(
