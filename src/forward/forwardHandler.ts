@@ -35,32 +35,30 @@ export async function triggerForwardRequests(
 
   const successes = await Promise.all(
     requestedChainIds.map(async (chainId) => {
-      const onChainConfig = getOnChainConfig(chainId);
-      if (!onChainConfig) {
-        console.error(
-          "Foreign blockchain requested is not supported [chainId:%s, oracleId:%s, taskId:%s]",
+      try {
+        const onChainConfig = getOnChainConfig(chainId);
+        if (!onChainConfig) {
+          console.error(
+            "Foreign blockchain requested is not supported [chainId:%s, oracleId:%s, taskId:%s]",
+            chainId,
+            oracleId,
+            taskId
+          );
+          return false;
+        }
+        const signedForwardRequest = await signForwardRequest(
           chainId,
+          wallet,
+          taskId,
           oracleId,
-          taskId
+          encodedValue,
+          onChainConfig
         );
+        return await postForwardRequest(signedForwardRequest, oracleId, taskId);
+      } catch (e) {
+        // catch promise rejection and convert it to false to prevent Promise.all rejection
         return false;
       }
-
-      const signedForwardRequest = await signForwardRequest(
-        chainId,
-        wallet,
-        taskId,
-        oracleId,
-        encodedValue,
-        onChainConfig
-        // catch promise rejection and convert it to false to prevent Promise.all rejection
-      ).catch((e) => false);
-
-      return await postForwardRequest(
-        signedForwardRequest,
-        oracleId,
-        taskId
-      ).catch((e) => false);
     })
   );
 
