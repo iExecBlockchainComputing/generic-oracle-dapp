@@ -263,6 +263,27 @@ steps:
       - cd deployment-dapp
       - npm run configure-ens
 
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack-webhook-product-dev
+      template: >
+        🏗️ {{repo.name}} build <{{build.link}}|#{{build.number}}>
+
+        ⚠️ A new version of oracle-factory dapp has been deployed ⚠️
+
+        ENS <https://explorer.iex.ec/bellecour/search/oracle-factory.apps.iexec.eth|oracle-factory.apps.iexec.eth> has been moved to the new app
+
+        👉 `VerifiedResultOracle` authorized app whitelist must be updated
+
+        <https://iexecproject.atlassian.net/wiki/spaces/IP/pages/3033038904/generic-oracle-contracts#Add-authorized-app|Add authorized app>
+    when:
+      target:
+        - dapp-prod
+      branch:
+        - main
+
 ---
 # pipeline to publish sell order
 kind: pipeline
