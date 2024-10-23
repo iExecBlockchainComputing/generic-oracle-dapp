@@ -59,12 +59,6 @@ const start = async () => {
     JSONPath: paramSet.JSONPath,
     dataType: paramSet.dataType,
   });
-  console.log(
-    "Received response from API [url:%s, date:%s, value:%s]",
-    paramSet.url,
-    new Date(date * 1000),
-    value
-  );
 
   let encodedValue: string;
   try {
@@ -92,7 +86,7 @@ const start = async () => {
     if (allForwardRequestsAccepted) {
       console.log("All forward requests accepted by Forwarder API");
     } else {
-      console.error("At least one forward request rejected by Forwarder API");
+      console.error("At least one forward request did not succeed");
     }
   }
   return encodedValue;

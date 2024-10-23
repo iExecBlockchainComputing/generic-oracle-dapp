@@ -28,7 +28,7 @@ export async function postForwardRequest(
     await response
       .json()
       .then((body) => body.message)
-      .then(console.log)
+      .catch((e) => undefined)
   );
   return false;
 }

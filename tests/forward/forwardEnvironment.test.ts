@@ -5,8 +5,8 @@ import {
 
 describe("Environment", () => {
   test("should get environment", async () => {
-    expect(getForwarderApiUrl()).toContain("http");
-    expect(getOnChainConfig(5)).toBeDefined();
-    expect(getOnChainConfig(80001)).toBeDefined();
+    expect(getForwarderApiUrl()).toContain("https");
+    expect(getOnChainConfig(1)).toBeDefined();
+    expect(getOnChainConfig(137)).toBeDefined();
   });
 });

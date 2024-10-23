@@ -6,20 +6,10 @@
       "oracle": "0x36dA71ccAd7A67053f0a4d9D5f55b725C9A25A3E",
       "providerUrl": ""
     },
-    "5": {
-      "forwarder": "0xc684E8645c8414812f22918146d72d1071E722AE",
-      "oracle": "0x36dA71ccAd7A67053f0a4d9D5f55b725C9A25A3E",
-      "providerUrl": ""
-    },
     "137": {
       "forwarder": "0xc684E8645c8414812f22918146d72d1071E722AE",
       "oracle": "0x36dA71ccAd7A67053f0a4d9D5f55b725C9A25A3E",
-      "providerUrl": "https://rpc-mainnet.maticvigil.com"
-    },
-    "80001": {
-      "forwarder": "0xc684E8645c8414812f22918146d72d1071E722AE",
-      "oracle": "0x36dA71ccAd7A67053f0a4d9D5f55b725C9A25A3E",
-      "providerUrl": "https://rpc-mumbai.maticvigil.com"
+      "providerUrl": ""
     }
   }
 }
