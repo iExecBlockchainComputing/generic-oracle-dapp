@@ -86,7 +86,7 @@ const start = async () => {
     if (allForwardRequestsAccepted) {
       console.log("All forward requests accepted by Forwarder API");
     } else {
-      console.error("At least one forward request rejected by Forwarder API");
+      console.error("At least one forward request did not succeed");
     }
   }
   return encodedValue;
