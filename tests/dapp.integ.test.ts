@@ -37,8 +37,7 @@ describe("dapp", () => {
     process.env.IEXEC_TASK_ID =
       "0x0000000000000000000000000000000000000000000000000000000000000abc";
     process.env.IEXEC_APP_DEVELOPER_SECRET = buildAppSecret(
-      // eslint-disable-next-line prettier/prettier
-      process.env.TARGET_PRIVATE_KEY,
+      process.env.TARGET_PRIVATE_KEY
     );
     process.env.IEXEC_INPUT_FILES_NUMBER = "1";
     process.env.IEXEC_INPUT_FILES_FOLDER = "./tests/test_files";
