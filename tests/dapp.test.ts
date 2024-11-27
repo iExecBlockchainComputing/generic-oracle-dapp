@@ -28,7 +28,7 @@ describe("dapp", () => {
 
     jest.mocked(triggerForwardRequests).mockReturnValue(Promise.resolve(true));
 
-    process.argv = ["", "", "80001,5"]; // Goerli & Mumbai Polygon
+    process.argv = ["", "", "80002,11155111"]; // Amoy Polygon & Sepolia
     process.env.IEXEC_TASK_ID =
       "0x0000000000000000000000000000000000000000000000000000000000000abc";
     process.env.IEXEC_APP_DEVELOPER_SECRET = buildAppSecret(
