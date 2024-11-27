@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.0]
+
+### Added
+
+- Added cross-chain support for Amoy and Sepolia networks
+
 ## [2.1.1]
 
 ### Changed
